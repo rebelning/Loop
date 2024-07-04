@@ -1,0 +1,8 @@
+/* The format string for the app name and version number. (1: bundle name)(2: bundle version) */
+"%1$@ v%2$@" = "%1$@ v%2$@";
+
+/* Title string for automatic bolus dosing strategy */
+"Automatic Bolus" = "自动大剂量";
+
+/* Title string for temp basal only dosing strategy */
+"Temp Basal Only" = "仅临时基础率";

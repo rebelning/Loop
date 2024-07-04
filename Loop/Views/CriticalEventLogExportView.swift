@@ -26,7 +26,7 @@ struct CriticalEventLogExportView: View {
             Spacer()
             Spacer()
         }
-        .navigationBarTitle(Text("Critical Event Logs", comment: "Critical event log export title"), displayMode: .automatic)
+        .navigationBarTitle(Text(NSLocalizedString("Critical Event Logs", comment: "Critical event log export title")), displayMode: .automatic)
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: cancelButton)
         .onAppear { self.viewModel.export() }
@@ -40,13 +40,13 @@ struct CriticalEventLogExportView: View {
             self.viewModel.cancel()
             self.presentationMode.wrappedValue.dismiss()
         }) {
-            Text("Cancel", comment: "Cancel export button title")
+            Text(NSLocalizedString("Cancel", comment: "Cancel export button title"))
         }
     }
 
     private var exportingView: some View {
         VStack {
-            Text("Preparing Critical Event Logs", comment: "Preparing critical event log text")
+            Text(NSLocalizedString("Preparing Critical Event Logs", comment: "Preparing critical event log text"))
                 .bold()
             ProgressView(progress: CGFloat(viewModel.progress))
                 .accentColor(.loopAccent)
@@ -62,7 +62,7 @@ struct CriticalEventLogExportView: View {
                 .frame(width: 50, height: 50)
                 .foregroundColor(.loopAccent)
                 .padding()
-            Text("Critical Event Log Ready", comment: "Critical event log ready text")
+            Text(NSLocalizedString("Critical Event Log Ready", comment: "Critical event log ready text"))
                 .bold()
         }
         .sheet(isPresented: $viewModel.showingShare, onDismiss: {
@@ -74,8 +74,8 @@ struct CriticalEventLogExportView: View {
     }
 
     private var errorAlert: SwiftUI.Alert {
-        Alert(title: Text("Error Exporting Logs", comment: "Critical event log export error alert title"),
-              message: Text("Critical Event Logs were not able to be exported.", comment: "Critical event log export error alert message"),
+        Alert(title: Text(NSLocalizedString("Error Exporting Logs", comment: "Critical event log export error alert title")),
+              message: Text(NSLocalizedString("Critical Event Logs were not able to be exported.", comment: "Critical event log export error alert message")),
               primaryButton: errorAlertPrimaryButton,
               secondaryButton: errorAlertSecondaryButton)
     }

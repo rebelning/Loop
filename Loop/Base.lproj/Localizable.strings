@@ -58,6 +58,9 @@
 /* The string format describing active carbohydrates. (1: localized glucose value description) */
 "Active Carbohydrates: %@" = "Active Carbohydrates: %@";
 
+/* Title describing quantity of still-absorbing carbohydrates */
+"Active Carbs" = "Active Carbs";
+
 /* The title of the Insulin On-Board graph */
 "Active Insulin" = "Active Insulin";
 
@@ -86,9 +89,6 @@
 
 /* Confirmation message for deleting a service */
 "Are you sure you want to delete this service?" = "Are you sure you want to delete this service?";
-
-/* The title of the section containing algorithm settings */
-"Algorithm Settings" = "Algorithm Settings";
 
 /* The title of the amplitude API key credential */
 "API Key" = "API Key";
@@ -141,6 +141,18 @@
 /* Description of the prediction input effect for carbohydrates. (1: The glucose unit string) */
 "Carbs Absorbed (g) ÷ Carb Ratio (g/U) × Insulin Sensitivity (%1$@/U)" = "Carbs Absorbed (g) ÷ Carb Ratio (g/U) × Insulin Sensitivity (%1$@/U)";
 
+/* Title for card displaying carb entry and bolus recommendation */
+"Bolus Summary" = "Bolus Summary";
+
+/* Title for card displaying carb entry and bolus recommendation */
+"Recommended Bolus" = "Recommended Bolus";
+
+/* Button text to begin entering a bolus */
+"Enter Bolus" = "Enter Bolus";
+
+/* Button text prompting manual glucose entry on bolus screen */
+"Enter Fingerstick Glucose" = "Enter Fingerstick Glucose";
+
 /* The notification alert describing a low pump battery */
 "Change the pump battery immediately" = "Change the pump battery immediately";
 
@@ -158,6 +170,10 @@
 
 /* The title text for the looping enabled switch cell */
 "Closed Loop" = "Closed Loop";
+
+/* The description text for the looping enabled switch cell when closed loop is not allowed because the sensor is inactive */
+"Closed Loop requires an active CGM Sensor Session" = "Closed Loop requires an active CGM Sensor Session";
+
 
 /* The title of the action used to dismiss an error alert */
 "com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
@@ -339,6 +355,7 @@
 /* Accessibility hint describing recommended bolus units */
 "Recommended Bolus: %@ Units" = "Recommended Bolus: %@ Units";
 
+
 /* Details for missing data error when reservoir data is missing */
 "Reservoir" = "Reservoir";
 
@@ -375,6 +392,9 @@
 /* The subtitle of the cell displaying an action to resume insulin delivery */
 "Tap to Resume" = "Tap to Resume";
 
+/* The subtitle of the cell displaying an action to add a manually measurement glucose value */
+"Tap to Add" = "Tap to Add";
+
 /* Subtitle description of Walsh insulin model setting */
 "The legacy model used by Loop, allowing customization of action duration." = "The legacy model used by Loop, allowing customization of action duration.";
 
@@ -393,9 +413,206 @@
 /* Title of insulin model setting */
 "Walsh" = "Walsh";
 
+/* Label for manual glucose entry row on bolus screen */
+"Fingerstick Glucose" = "Fingerprik blodsukker";
+
 /* Explanation of suspend threshold */
 "When current or forecasted glucose is below the suspend threshold, Loop will not recommend a bolus, and will always recommend a temporary basal rate of 0 units per hour." = "When current or forecasted glucose is below the suspend threshold, Loop will not recommend a bolus, and will always recommend a temporary basal rate of 0 units per hour.";
 
 /* The label of the workout mode toggle button */
 "Workout Targets" = "Workout Targets";
+
+/* Title for bolus screen notice when glucose data is missing or stale */
+"No Recent Glucose Data" = "No Recent Glucose Data";
+
+/* The title of the cell indicating that there is no recent glucose */
+"No Recent Glucose" = "No Recent Glucose";
+
+/* Caption for bolus screen notice when glucose data is missing or stale */
+"Enter a blood glucose from a meter for a recommended bolus amount." = "Enter a blood glucose from a meter for a recommended bolus amount.";
+
+/* The title of the Dosing Strategy section in settings */
+"Dosing Strategy" = "Dosing Strategy";
+
+/* Title string for temp basal only dosing strategy */
+"Temp Basal Only" = "Temp Basal Only";
+
+/* Description string for temp basal only dosing strategy */
+"Loop will set temporary basal rates to increase and decrease insulin delivery." = "Loop will set temporary basal rates to increase and decrease insulin delivery.";
+
+/* Title string for automatic bolus dosing strategy */
+"Automatic Bolus" = "Automatic Bolus";
+
+/* Description string for automatic bolus dosing strategy */
+"Loop will automatically bolus when insulin needs are above scheduled basal, and will use temporary basal rates when needed to reduce insulin delivery below scheduled basal." = "Loop will automatically bolus when insulin needs are above scheduled basal, and will use temporary basal rates when needed to reduce insulin delivery below scheduled basal.";
+
+
+/* Alert Permissions button text
+   Title of alert management screen */
+"Alert Management" = "Alert Management";
+
+/* Alert Permissions button text
+   Notification & Critical Alert Permissions screen title */
+"Alert Permissions" = "Alert Permissions";
+
+
+
+/* Alert Permissions descriptive text (1: app name) */
+"Notifications give you important %1$@ app information without requiring you to open the app." = "Notifications give you important %1$@ app information without requiring you to open the app.";
+
+/* Alert Permissions descriptive text (1: app name) */
+"Notifications give you important %1$@ app information without requiring you to open the app.\n\nKeep these turned ON in your phone’s settings to ensure you receive %1$@ Notifications, Critical Alerts, and Time Sensitive Notifications." = "Notifications give you important %1$@ app information without requiring you to open the app.\n\nKeep these turned ON in your phone’s settings to ensure you receive %1$@ Notifications, Critical Alerts, and Time Sensitive Notifications.";
+
+/* Description of missed meal notifications. */
+"When enabled, Loop can notify you when it detects a meal that wasn't logged." = "When enabled, Loop can notify you when it detects a meal that wasn't logged.";
+
+/* Manage Permissions in Settings button text */
+"Manage Permissions in Settings" = "Manage Permissions in Settings";
+
+
+/* Notification Delivery Status text */
+"Notification Delivery" = "Notification Delivery";
+
+/* Notifications Status text */
+"Notifications" = "Notifications";
+
+/* Critical Alerts Status text */
+"Critical Alerts" = "Critical Alerts";
+
+/* Time Sensitive Status text */
+"Time Sensitive Notifications" = "Time Sensitive Notifications";
+
+/* Section title for Support
+   The title of the support section in settings */
+"Support" = "Support";
+
+/* Get help with Alert Permissions support button text */
+"Get help with Alert Permissions" = "Get help with Alert Permissions";
+
+/* Immediate Delivery status text */
+"Immediate" = "Immediate";
+
+/* text on */
+"On" = "On";
+
+/* text off */
+"Off" = "Off";
+
+/* Title text for button to Therapy Settings */
+"Therapy Settings" = "Therapy Settings";
+
+/* Navigation Link Title for Usage Data Sharing */
+"Usage Data Sharing" = "Usage Data Sharing";
+
+/* Title in UsageDataPrivacyPreferenceView for no sharing */
+"No Sharing" = "No Sharing";
+
+/* Title on UsageDataPrivacyPreferenceView */
+"Share Data" = "Share Data";
+
+/* Title in UsageDataPrivacyPreferenceView for shareInstallationStatsOnly */
+"Share Version Only" = "Share Version Only";
+
+/* Navigation link title for Submit Bug Report */
+"Submit Bug Report" = "Submit Bug Report";
+
+/* Error message for reservoir view when reservoir empty
+   Status highlight message for emptyReservoir alarm.
+   Status highlight that a pump is out of insulin. */
+"No Insulin" = "No Insulin";
+
+/* Status highlight that insulin delivery was suspended. */
+"Insulin Suspended" = "Insulin Suspended";
+
+/* Error message for reservoir view during general pod fault
+   Status highlight when communications with the pod haven't happened recently. */
+"Signal Loss" = "Signal Loss";
+
+
+/* Navigation title for algorithms experiments screen
+   The title of the Algorithm Experiments section in settings */
+"Algorithm Experiments" = "Algorithm Experiments";
+
+/* Algorithm Experiments description. */
+"Algorithm Experiments are optional modifications to the Loop Algorithm. These modifications are less tested than the standard Loop Algorithm, so please use carefully." = "Algorithm Experiments are optional modifications to the Loop Algorithm. These modifications are less tested than the standard Loop Algorithm, so please use carefully.";
+
+/* The title of the section containing algorithm settings */
+"Algorithm Settings" = "Algorithm Settings";
+
+/* Title for Glucose Based Partial Application toggle */
+"Enable Glucose Based Partial Application" = "Enable Glucose Based Partial Application";
+
+/* Title for Integral Retrospective Correction toggle */
+"Enable Integral Retrospective Correction" = "Enable Integral Retrospective Correction";
+
+/* No comment provided by engineer. */
+"Caution" = "Caution";
+
+/* Algorithm Experiments description second paragraph. */
+"In future versions of Loop these experiments may change, end up as standard parts of the Loop Algorithm, or be removed from Loop entirely. Please follow along in the Loop Zulip chat to stay informed of possible changes to these features." = "In future versions of Loop these experiments may change, end up as standard parts of the Loop Algorithm, or be removed from Loop entirely. Please follow along in the Loop Zulip chat to stay informed of possible changes to these features.";
+
+/* Title for glucose based partial application experiment description
+   Title of glucose based partial application experiment */
+"Glucose Based Partial Application" = "Glucose Based Partial Application";
+
+/* Title for integral retrospective correction experiment description
+   Title of integral retrospective correction experiment */
+"Integral Retrospective Correction" = "Integral Retrospective Correction";
+
+"Favorite Foods"="Favorite Foods";
+
+"Simplify Carb Entry"="Simplify Carb Entry";
+
+/* No comment provided by engineer. */
+"Selecting a favorite food in the carb entry screen automatically fills in the carb quantity, food type, and absorption time fields! Tap the add button below to create your first favorite food!" = "Selecting a favorite food in the carb entry screen automatically fills in the carb quantity, food type, and absorption time fields! Tap the add button below to create your first favorite food!";
+
+/* No comment provided by engineer. */
+"Add a new favorite food" = "Add a new favorite food";
+
+/* Title of the user activity for adding carbs */
+"Add Carb Entry" = "Add Carb Entry";
+
+/* No comment provided by engineer. */
+"Done" = "Done";
+
+/* Descriptive text for button to add CGM device */
+"Tap here to set up a CGM" = "Tap here to set up a CGM";
+
+/* Descriptive text for button to add pump device */
+"Tap here to set up a pump" = "Tap here to set up a pump";
+
+/* The descriptive text of the add service button in settings */
+"Tap here to set up a Service" = "Tap here to set up a Service";
+
+/* The title of the export critical event logs in support */
+"Export Critical Event Logs" = "Export Critical Event Logs";
+
+/* The export file name formatted string (1: timestamp) */
+"Export-%1$@" = "Export-%1$@";
+
+/* Settings app profile section */
+"App Profile" = "App Profile";
+
+/* remaining time in setting's profile expiration section */
+" remaining" = " remaining";
+
+/* Settings App Profile expiration view */
+"Profile Expiration" = "Profile Expiration";
+
+/* Time that profile expires */
+"Profile expires " = "Profile expires ";
+
+/* The title text for how to update */
+"How to update (LoopDocs)" = "How to update (LoopDocs)";
+
+/* Descriptive text for Therapy Settings */
+"Diabetes Treatment" = "Diabetes Treatment";
+
+/*Alert Permissions descriptive text*/
+"Alert Permissions and Mute Alerts"="Alert Permissions and Mute Alerts";
+
+/* Descriptive text for Insulin Pump */
+"Insulin Pump" = "Insulin Pump";
+
+
 
