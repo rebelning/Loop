@@ -681,8 +681,6 @@
 /* No comment provided by engineer. */
 "Add a new favorite food" = "添加新的喜爱的食物";
 
-/* Title of the user activity for adding carbs */
-"Add Carb Entry" = "添加碳水化合物输入";
 
 /* No comment provided by engineer. */
 "Done" = "完成";
@@ -734,3 +732,104 @@
 
 /* Descriptive text for Insulin Pump */
 "Insulin Pump" = "胰岛素泵";
+
+/* Label for carb quantity entry row on carb entry screen */
+"Amount Consumed" = "摄入量";
+
+/* Title of the button to begin lesson execution */
+"Continue" = "继续";
+
+/* Button text for saving a food item as a favorite */
+"Save as favorite food" = "保存为喜爱的食物";
+
+/* Label for choosing a favorite food item */
+"Choose Favorite:" = "选择喜爱的食物：";
+
+/* Section title for the list of favorite foods */
+"FAVORITE FOODS" = "喜爱的食物";
+
+/* Title of the warning shown when a large meal was entered */
+"Large Meal Entered" = "已输入大餐";
+
+/* Alert body when entered carbohydrates is greater than threshold (1: entered quantity in grams) */
+"Did you intend to enter %1$@ grams as the amount of carbohydrates for this meal?" = "您是否打算输入 %1$@ 克作为这顿饭的碳水化合物量？";
+
+/* Alert message for a bolus too small validation error */
+"The bolus amount entered is smaller than the minimum deliverable." = "输入的胰岛素注射量小于最小可输送量。";
+
+/* Forecast explanation modal on bolus view */
+"The bolus dosing algorithm uses a more conservative estimate of forecasted blood glucose than what is used to adjust your basal rate.\n\nAs a result, your forecasted blood glucose after a bolus may still be higher than your target range." = "胰岛素注射算法使用比调整基础率更保守的预测血糖估计。\n\n因此，注射后的预测血糖可能仍高于您的目标范围。";
+
+/* Alert message for an updated bolus recommendation */
+"The bolus recommendation has updated. Please reconfirm the bolus amount." = "胰岛素注射建议已更新。请重新确认注射量。";
+
+/* Subtitle description of Walsh insulin model setting */
+"The legacy model used by Loop, allowing customization of action duration." = "Loop 使用的传统模型，允许自定义作用持续时间。";
+
+/* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
+"The maximum allowed amount is %@ grams." = "允许的最大量是 %@ 克。";
+
+/* Warning for simple bolus when carbohydrate entry is too large. (1: maximum carbohydrate entry) */
+"The maximum amount allowed is %1$@." = "允许的最大量是 %1$@。";
+
+/* Alert message for a maximum bolus validation error (1: max bolus value) */
+"The maximum bolus amount is %@ U." = "最大胰岛素注射量为 %@ 单位。";
+
+/* Body of the alert describing a maximum bolus validation error. (1: The localized max bolus value) */
+"The maximum bolus amount is %@ Units" = "最大胰岛素注射量为 %@ 单位";
+
+/* Alert message for a missing maximum bolus setting error */
+"The maximum bolus setting must be configured before a bolus can be delivered." = "必须先配置最大胰岛素注射量设置，然后才能进行注射。";
+
+* Title for bolus screen notice when no bolus is recommended
+   Title for bolus screen warning when glucose is below suspend threshold, and a bolus is not recommended
+   Title for bolus screen warning when no bolus is recommended */
+"No Bolus Recommended" = "不建议注射胰岛素";
+
+/* Alert title for a missing maximum bolus setting error */
+"No Maximum Bolus Configured" = "未配置最大胰岛素注射量";
+
+/* Alert title for a missing pump error */
+"No Pump Configured" = "未配置胰岛素泵";
+
+/* Title for bolus screen notice when pump data is missing or stale */
+"No Recent Pump Data" = "无最新泵数据";
+
+/* The title of the action used when rejecting the the amount of carbohydrates entered. */
+"No, edit amount" = "不，编辑数量";
+
+/* Bluetooth unavailable alert body. */
+"Loop has detected an issue with your Bluetooth settings, and will not work successfully until Bluetooth is enabled. You will not receive glucose readings, or be able to bolus." = "Loop检测到您的蓝牙设置有问题，在启用蓝牙之前无法正常工作。您将无法接收血糖读数或进行胰岛素注射。";
+
+/* Warning displayed when user is adding a meal from a missed meal notification */
+"Loop has detected a missed meal and estimated its size. Edit the carb amount to match the amount of any carbs you may have eaten." = "Loop检测到一次错过的用餐并估算了其大小。编辑碳水化合物的量以匹配您可能摄入的碳水化合物量。";
+
+/* Bluetooth off background alert body. */
+"Loop will not work successfully until Bluetooth is enabled. You will not receive glucose readings, or be able to bolus." = "在启用蓝牙之前，Loop无法正常工作。您将无法接收血糖读数或进行胰岛素注射。";
+
+/* Warning to ensure the carb entry is accurate during an override */
+"An active override is modifying your carb ratio and insulin sensitivity. If you don't want this to affect your bolus calculation and projected glucose, consider turning off the override." = "一个活动的覆盖正在修改您的碳水化合物比例和胰岛素敏感性。如果您不希望这影响您的胰岛素注射计算和预测的血糖值，请考虑关闭覆盖。";
+
+/* Alert message for a carb entry persistence error */
+"An error occurred while trying to save your carb entry." = "尝试保存碳水化合物输入时发生错误。";
+
+/* Alert message for a manual glucose entry persistence error */
+"An error occurred while trying to save your manual glucose entry." = "尝试保存手动血糖输入时发生错误。";
+
+/* Invalid onboarding state */
+"An unexpected onboarding error state occurred." = "发生了意外的入职错误状态。";
+
+/* Alert message when glucose data returns while on bolus screen */
+"An updated bolus recommendation is available." = "有一个更新的胰岛素注射建议可用。";
+
+/* The title of the view controller to create a new carb entry */
+"carb-entry-title-add" = "添加碳水化合物";
+
+/*Label for displaying time-related information*/
+"Time"="时间";
+
+/* Label for displaying food type information */
+"Food Type" = "食物类型";
+
+
+

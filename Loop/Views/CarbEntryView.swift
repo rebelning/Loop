@@ -188,7 +188,7 @@ extension CarbEntryView {
             )
             let okMessage = NSLocalizedString("com.loudnate.LoopKit.errorAlertActionTitle", value: "OK", comment: "The title of the action used to dismiss an error alert")
             return SwiftUI.Alert(
-                title: Text("Large Meal Entered", comment: "Title of the warning shown when a large meal was entered"),
+                title: Text(NSLocalizedString("Large Meal Entered", comment:"Title of the warning shown when a large meal was entered" )),
                 message: Text(message),
                 dismissButton: .cancel(Text(okMessage), action: viewModel.clearAlert)
             )
@@ -198,10 +198,10 @@ extension CarbEntryView {
                 NumberFormatter.localizedString(from: NSNumber(value: viewModel.carbsQuantity ?? 0), number: .none)
             )
             return SwiftUI.Alert(
-                title: Text("Large Meal Entered", comment: "Title of the warning shown when a large meal was entered"),
+                title: Text(NSLocalizedString("Large Meal Entered", comment:"Title of the warning shown when a large meal was entered" )),
                 message: Text(message),
-                primaryButton: .default(Text("No, edit amount", comment: "The title of the action used when rejecting the the amount of carbohydrates entered."), action: viewModel.clearAlert),
-                secondaryButton: .cancel(Text("Yes", comment: "The title of the action used when confirming entered amount of carbohydrates."), action: viewModel.clearAlertAndContinueToBolus)
+                primaryButton: .default(Text(NSLocalizedString("No, edit amount", comment: "The title of the action used when rejecting the the amount of carbohydrates entered.")), action: viewModel.clearAlert),
+                secondaryButton: .cancel(Text(NSLocalizedString("Yes", comment: "The title of the action used when confirming entered amount of carbohydrates.")), action: viewModel.clearAlertAndContinueToBolus)
             )
         }
     }
@@ -211,7 +211,7 @@ extension CarbEntryView {
 extension CarbEntryView {
     private var favoriteFoodsCard: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("FAVORITE FOODS")
+            Text(NSLocalizedString("FAVORITE FOODS", comment: "Section title for the list of favorite foods"))
                 .font(.footnote)
                 .foregroundColor(.secondary)
                 .padding(.horizontal, 26)
@@ -220,8 +220,7 @@ extension CarbEntryView {
                 if !viewModel.favoriteFoods.isEmpty {
                     VStack {
                         HStack {
-                            Text("Choose Favorite:")
-                            
+                            Text(NSLocalizedString("Choose Favorite:", comment: "Label for choosing a favorite food item"))
                             let selectedFavorite = favoritedFoodTextFromIndex(viewModel.selectedFavoriteFoodIndex)
                             Text(selectedFavorite)
                                 .minimumScaleFactor(0.8)
@@ -253,7 +252,7 @@ extension CarbEntryView {
                 }
                 
                 Button(action: saveAsFavoriteFood) {
-                    Text("Save as favorite food")
+                    Text(NSLocalizedString("Save as favorite food", comment: "Button text for saving a food item as a favorite"))
                         .frame(maxWidth: .infinity)
                 }
                 .disabled(viewModel.saveFavoriteFoodButtonDisabled)
@@ -290,20 +289,20 @@ extension CarbEntryView {
 extension CarbEntryView {
     private var dismissButton: some View {
         Button(action: dismiss) {
-            Text("Cancel")
+            Text(NSLocalizedString("Cancel", comment: "Button text to cancel the current action"))
         }
     }
     
     private var continueButton: some View {
         Button(action: viewModel.continueToBolus) {
-            Text("Continue")
+            Text(NSLocalizedString("Continue", comment: "Button text to proceed with the current action"))
         }
         .disabled(viewModel.continueButtonDisabled)
     }
     
     private var continueActionButton: some View {
         Button(action: viewModel.continueToBolus) {
-            Text("Continue")
+            Text(NSLocalizedString("Continue", comment: "Button text to proceed with the current action"))
         }
         .buttonStyle(ActionButtonStyle())
         .padding()

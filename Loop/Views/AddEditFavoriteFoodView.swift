@@ -101,7 +101,7 @@ struct AddEditFavoriteFoodView: View {
             
             CardSectionDivider()
             
-            EmojiRow(text: $viewModel.foodType, isFocused: foodTypeFocused, emojiType: .food, title: "Food Type")
+            EmojiRow(text: $viewModel.foodType, isFocused: foodTypeFocused, emojiType: .food, title: NSLocalizedString("Food Type", comment: "Label for displaying the type of food"))
             
             CardSectionDivider()
 
@@ -123,7 +123,7 @@ struct AddEditFavoriteFoodView: View {
             )
             let okMessage = NSLocalizedString("com.loudnate.LoopKit.errorAlertActionTitle", value: "OK", comment: "The title of the action used to dismiss an error alert")
             return SwiftUI.Alert(
-                title: Text("Large Meal Entered", comment: "Title of the warning shown when a large meal was entered"),
+                title: Text(NSLocalizedString("Large Meal Entered", comment: "Title of the warning shown when a large meal was entered")),
                 message: Text(message),
                 dismissButton: .cancel(Text(okMessage), action: viewModel.clearAlert)
             )
@@ -133,10 +133,10 @@ struct AddEditFavoriteFoodView: View {
                 NumberFormatter.localizedString(from: NSNumber(value: viewModel.carbsQuantity ?? 0), number: .none)
             )
             return SwiftUI.Alert(
-                title: Text("Large Meal Entered", comment: "Title of the warning shown when a large meal was entered"),
+                title: Text(NSLocalizedString("Large Meal Entered", comment: "Title of the warning shown when a large meal was entered")),
                 message: Text(message),
-                primaryButton: .default(Text("No, edit amount", comment: "The title of the action used when rejecting the the amount of carbohydrates entered."), action: viewModel.clearAlert),
-                secondaryButton: .cancel(Text("Yes", comment: "The title of the action used when confirming entered amount of carbohydrates."), action: viewModel.clearAlertAndSave)
+                primaryButton: .default(Text(NSLocalizedString("No, edit amount", comment: "The title of the action used when rejecting the the amount of carbohydrates entered.")), action: viewModel.clearAlert),
+                secondaryButton: .cancel(Text(NSLocalizedString("Yes", comment: "The title of the action used when confirming entered amount of carbohydrates.")), action: viewModel.clearAlertAndSave)
             )
         }
     }
@@ -145,13 +145,13 @@ struct AddEditFavoriteFoodView: View {
 extension AddEditFavoriteFoodView {
     private var dismissButton: some View {
         Button(action: dismiss.callAsFunction) {
-            Text("Cancel")
+            Text(NSLocalizedString("Cancel", comment: "Button text to cancel the current action"))
         }
     }
     
     private var saveActionButton: some View {
         Button(action: viewModel.save) {
-            Text("Save")
+            Text(NSLocalizedString("Save", comment: "Button text to save the current changes"))
         }
         .buttonStyle(ActionButtonStyle())
         .padding()
@@ -160,7 +160,7 @@ extension AddEditFavoriteFoodView {
     
     private var saveButton: some View {
         Button(action: viewModel.save) {
-            Text("Save")
+            Text(NSLocalizedString("Save", comment: "Button text to save the current changes"))
         }
         .disabled(viewModel.updatedFavoriteFood == nil)
     }
