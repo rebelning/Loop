@@ -710,3 +710,7 @@
 
 /* Label for displaying food type information */
 "Food Type" = "Food Type";
+
+/* Caption for bolus screen notice when pump data is missing or stale */
+"Your pump data is stale. %1$@ cannot recommend a bolus amount." = "Your pump data is stale. %1$@ cannot recommend a bolus amount.";
+

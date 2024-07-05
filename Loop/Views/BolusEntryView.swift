@@ -310,28 +310,28 @@ struct BolusEntryView: View {
         case .predictedGlucoseBelowSuspendThreshold(suspendThreshold: let suspendThreshold):
             let suspendThresholdString = displayGlucosePreference.format(suspendThreshold)
             return WarningView(
-                title: Text("No Bolus Recommended", comment: "Title for bolus screen notice when no bolus is recommended"),
+                title: Text(NSLocalizedString("No Bolus Recommended", comment:"Title for bolus screen notice when no bolus is recommended")),
                 caption: Text("Your glucose is below or predicted to go below your glucose safety limit, \(suspendThresholdString).", comment: "Caption for bolus screen notice when no bolus is recommended due to prediction dropping below glucose safety limit")
             )
         case .staleGlucoseData:
             return WarningView(
-                title: Text("No Recent Glucose Data", comment: "Title for bolus screen notice when glucose data is missing or stale"),
+                title: Text(NSLocalizedString("No Recent Glucose Data", comment: "Title for bolus screen notice when glucose data is missing or stale")),
                 caption: Text("Enter a blood glucose from a meter for a recommended bolus amount.", comment: "Caption for bolus screen notice when glucose data is missing or stale")
             )
         case .futureGlucoseData:
             return WarningView(
-                title: Text("Invalid Future Glucose", comment: "Title for bolus screen notice when glucose data is in the future"),
+                title: Text(NSLocalizedString("Invalid Future Glucose", comment: "Title for bolus screen notice when glucose data is in the future")),
                 caption: Text("Check your device time and/or remove any invalid data from Apple Health.", comment: "Caption for bolus screen notice when glucose data is in the future")
             )
         case .stalePumpData:
             return WarningView(
-                title: Text("No Recent Pump Data", comment: "Title for bolus screen notice when pump data is missing or stale"),
+                title: Text(NSLocalizedString("No Recent Pump Data", comment: "Title for bolus screen notice when pump data is missing or stale")),
                 caption: Text(String(format: NSLocalizedString("Your pump data is stale. %1$@ cannot recommend a bolus amount.", comment: "Caption for bolus screen notice when pump data is missing or stale"), appName)),
                 severity: .critical
             )
         case .predictedGlucoseInRange, .glucoseBelowTarget:
             return WarningView(
-                title: Text("No Bolus Recommended", comment: "Title for bolus screen notice when no bolus is recommended"),
+                title: Text(NSLocalizedString("No Bolus Recommended", comment: "Title for bolus screen notice when no bolus is recommended")),
                 caption: Text("Based on your predicted glucose, no bolus is recommended.", comment: "Caption for bolus screen notice when no bolus is recommended for the predicted glucose")
             )
         }
@@ -344,7 +344,7 @@ struct BolusEntryView: View {
                     self.viewModel.isManualGlucoseEntryEnabled = true
                 }
             },
-            label: { Text("Enter Fingerstick Glucose", comment: "Button text prompting manual glucose entry on bolus screen") }
+            label: { Text(NSLocalizedString("Enter Fingerstick Glucose", comment: "Button text prompting manual glucose entry on bolus screen")) }
         )
         .buttonStyle(ActionButtonStyle(viewModel.primaryButton == .manualGlucoseEntry ? .primary : .secondary))
         .padding([.top, .horizontal])
@@ -366,13 +366,13 @@ struct BolusEntryView: View {
             label: {
                 switch viewModel.actionButtonAction {
                 case .saveWithoutBolusing:
-                    return Text("Save without Bolusing", comment: "Button text to save carbs and/or manual glucose entry without a bolus")
+                    return Text(NSLocalizedString("Save without Bolusing", comment: "Button text to save carbs and/or manual glucose entry without a bolus"))
                 case .saveAndDeliver:
-                    return Text("Save and Deliver", comment: "Button text to save carbs and/or manual glucose entry and deliver a bolus")
+                    return Text(NSLocalizedString("Save and Deliver", comment: "Button text to save carbs and/or manual glucose entry and deliver a bolus"))
                 case .enterBolus:
-                    return Text("Enter Bolus", comment: "Button text to begin entering a bolus")
+                    return Text(NSLocalizedString("Enter Bolus", comment: "Button text to begin entering a bolus"))
                 case .deliver:
-                    return Text("Deliver", comment: "Button text to deliver a bolus")
+                    return Text(NSLocalizedString("Deliver", comment: "Button text to deliver a bolus"))
                 }
             }
         )

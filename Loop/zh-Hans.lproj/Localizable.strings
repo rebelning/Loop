@@ -831,5 +831,6 @@
 /* Label for displaying food type information */
 "Food Type" = "食物类型";
 
-
+/* Caption for bolus screen notice when pump data is missing or stale */
+"Your pump data is stale. %1$@ cannot recommend a bolus amount." = "您的泵数据已过期。%1$@ 无法推荐胰岛素注射量。";
 
