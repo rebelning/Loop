@@ -43,6 +43,4 @@
 /* Unit string for a count of calendar weeks */
 "Weeks" = "周";
 
-/* Title of the user activity for adding carbs */
-"Add Carb Entry" = "添加碳水化合物输入";
 

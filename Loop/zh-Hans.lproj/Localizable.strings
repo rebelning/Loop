@@ -47,10 +47,10 @@
 "A model based on the published absorption of Fiasp insulin." = "基于公布的Fiasp胰岛素吸收的模型";
 
 /* Subtitle of Rapid-Acting – Adult preset */
-"A model based on the published absorption of Humalog, Novolog, and Apidra insulin in adults." = "基于已公布的Humalog，Novolog和Apidra胰岛素在成人中吸收的模型。";
+"A model based on the published absorption of Humalog, Novolog, and Apidra insulin in adults." = "基于已公布的(优泌乐)Humalog，(诺和诺德)Novolog和(艾倍得)Apidra胰岛素在成人中吸收的模型。";
 
 /* Subtitle of Lyumjev preset */
-"A model based on the published absorption of Lyumjev insulin." = "基于公布的Lyumjev胰岛素吸收的模型";
+"A model based on the published absorption of Lyumjev insulin." = "基于公布的(超速效赖浦)Lyumjev胰岛素吸收的模型";
 
 /* Action to copy the recommended Bolus value to the actual Bolus Field */
 "AcceptRecommendedBolus" = "AcceptRecommendedBolus";
@@ -473,37 +473,37 @@
 
 "Partial Bolus Application" = "自动大剂量输注占比(指单次输注推荐大剂量的总量占比)";
 
-"What part of the recommended bolus will be applied automatically." = "What part of the recommended bolus will be applied automatically.";
+"What part of the recommended bolus will be applied automatically." = "推荐的胰岛素注射量中哪部分将自动应用。";
 
-"Basal Rate Multiplier" = "Basal Rate Multiplier";
+"Basal Rate Multiplier" = "基础率倍数";
 
 "Max basal limit" = "最大的大剂量限制";
 
-"Limits the maximum basal rate to a multiple of the scheduled basal rate in loop. The value cannot exceed your maximum basal rate setting. This setting is ignored if microboluses are disabled." = "Limits the maximum basal rate to a multiple of the scheduled basal rate in loop. The value cannot exceed your maximum basal rate setting. This setting is ignored if microboluses are disabled.";
+"Limits the maximum basal rate to a multiple of the scheduled basal rate in loop. The value cannot exceed your maximum basal rate setting. This setting is ignored if microboluses are disabled." = "将最大基础率限制为回路中计划基础率的倍数。该值不能超过您的最大基础率设置。如果禁用了微量注射，此设置将被忽略。";
 
-"Temporary overrides" = "Temporary overrides";
+"Temporary overrides" = "临时覆盖";
 
-"Disable MB by enabling temporary override" = "Disable MB by enabling temporary override";
+"Disable MB by enabling temporary override" = "通过启用临时覆盖来禁用微量注射";
 
-"If the override's target range starts at the given value or more" = "If the override's target range starts at the given value or more";
+"If the override's target range starts at the given value or more" = "如果覆盖的目标范围从给定值或更高开始";
 
-"Other Options" = "Other Options";
+"Other Options" = "其他选项";
 
-"Open bolus screen after carbs on watch" = "Open bolus screen after carbs on watch";
+"Open bolus screen after carbs on watch" = "在手表上输入碳水化合物后打开注射屏幕";
 
-"Minimum Bolus Size" = "Minimum Bolus Size";
+"Minimum Bolus Size" = "最小注射量";
 
-"Last Event" = "Last Event";
+"Last Event" = "最近事件";
 
-"This is the minimum microbolus size in units that will be delivered. Only if the microbolus calculated is equal to or greater than this number of units will a bolus be delivered." = "This is the minimum microbolus size in units that will be delivered. Only if the microbolus calculated is equal to or greater than this number of units will a bolus be delivered.";
+"This is the minimum microbolus size in units that will be delivered. Only if the microbolus calculated is equal to or greater than this number of units will a bolus be delivered." = "这是将要输送的最小微量注射单位。只有当计算出的微量注射等于或大于这个单位数时，才会输送注射。";
 
 "Disabled" = "停用";
 
 "Always" = "总是";
 
-"With Carbs" = "With Carbs";
+"With Carbs" = "含碳水化合物";
 
-"Without Carbs" = "Without Carbs";
+"Without Carbs" = "不含碳水化合物";
 
 "Export Settings" = "导出设置";
 
@@ -521,19 +521,19 @@
 
 "Set" = "设置";
 
-"Safety" = "Safety";
+"Safety" = "安全";
 
-"Allow MBs when the sensor value is invalid" = "Allow MBs when the sensor value is invalid";
+"Allow MBs when the sensor value is invalid" = "当传感器值无效时允许微量注射";
 
-"Sometimes you may see an exclamation mark next to the glucose value. In such cases microboluses will not be applied. Turn this setting on if you want to ignore warnings." = "Sometimes you may see an exclamation mark next to the glucose value. In such cases microboluses will not be applied. Turn this setting on if you want to ignore warnings.";
+"Sometimes you may see an exclamation mark next to the glucose value. In such cases microboluses will not be applied. Turn this setting on if you want to ignore warnings." = "有时您可能会看到血糖值旁边有一个感叹号。在这种情况下，将不会应用微量注射。如果您想忽略警告，请打开此设置。";
 
-"Other FreeAPS settings" = "Other FreeAPS settings";
+"Other FreeAPS settings" = "其他 FreeAPS 设置";
 
-"Show required carbs on the app badge" = "Show required carbs on the app badge";
+"Show required carbs on the app badge" = "在应用图标上显示所需碳水化合物";
 
-"Allow MBs when glucose is below target range" = "Allow MBs when glucose is below target range";
+"Allow MBs when glucose is below target range" = "当血糖低于目标范围时允许微量注射";
 
-"Retrospective Correction interval" = "Retrospective Correction interval";
+"Retrospective Correction interval" = "回顾性校正间隔";
 
 
 /* Title for bolus screen notice when glucose data is missing or stale */
@@ -781,7 +781,7 @@
 /* Alert message for a missing maximum bolus setting error */
 "The maximum bolus setting must be configured before a bolus can be delivered." = "必须先配置最大胰岛素注射量设置，然后才能进行注射。";
 
-* Title for bolus screen notice when no bolus is recommended
+/* Title for bolus screen notice when no bolus is recommended
    Title for bolus screen warning when glucose is below suspend threshold, and a bolus is not recommended
    Title for bolus screen warning when no bolus is recommended */
 "No Bolus Recommended" = "不建议注射胰岛素";
@@ -833,4 +833,74 @@
 
 /* Caption for bolus screen notice when pump data is missing or stale */
 "Your pump data is stale. %1$@ cannot recommend a bolus amount." = "您的泵数据已过期。%1$@ 无法推荐胰岛素注射量。";
+
+/* Alert title for closed loop off informational modal */
+"Closed Loop OFF" = "闭环关闭";
+
+/* The description text for the looping enabled switch cell when onboarding is not complete */
+"Closed Loop requires Setup to be Complete" = "闭环需要完成设置";
+
+/* Title for missed meal notifications toggle */
+"Missed Meal Notifications" = "漏餐通知";
+
+/* Bolus error description: missing maximum bolus in settings. */
+"Missing maximum allowed bolus in settings" = "设置中缺少最大允许的大剂量注射量";
+
+/* The notification title for a meal that was possibly not logged in Loop. */
+"Possible Missed Meal" = "可能漏记的用餐";
+
+/* Title for sheet to enable/disable pre-meal on watch */
+"Pre-Meal" = "餐前模式";
+
+/* Title for sheet */
+"New Favorite Food" = "新喜爱食物";
+
+/* Message presented in the status row instructing the user to tap this row to stop a bolus */
+"Tap to Stop" = "点击停止输注";
+
+/* Caption for bolus screen notice when no bolus is recommended for the predicted glucose */
+"Based on your predicted glucose, no bolus is recommended." = "基于您的预测血糖，不建议注射胰岛素。";
+
+/* Caption for bolus screen notice when glucose data is in the future */
+"Check your device time and/or remove any invalid data from Apple Health." = "请检查您的设备时间和/或从 Apple Health 中移除任何无效数据。";
+
+/* Title for bolus screen notice when glucose data is in the future */
+"Invalid Future Glucose" = "无效的未来血糖数据";
+
+/* Caption for bolus screen notice when no bolus is recommended due to prediction dropping below glucose safety limit */
+"Your glucose is below or predicted to go below your glucose safety limit, %@." = "您的血糖低于或预测将低于您的血糖安全限制，%@。";
+
+/* Alert title for an updated bolus recommendation */
+"Bolus Recommendation Updated" = "胰岛素注射建议已更新";
+
+/* Alert message for a maximum bolus validation error (1: max bolus value) */
+"The maximum bolus amount is %@ U." = "最大胰岛素注射量为 %@ 单位。";
+
+/* Alert title for a bolus too small validation error */
+"Bolus Too Small" = "胰岛素注射量过小";
+
+/* Alert message for a missing pump error */
+"A pump must be configured before a bolus can be delivered." = "必须先配置泵，然后才能进行胰岛素注射。";
+
+/* Alert title for a carb entry persistence error */
+"Unable to Save Carb Entry" = "无法保存碳水化合物输入";
+
+/* Alert title for a manual glucose entry out of range error
+   Title for bolus screen warning when glucose entry is out of range */
+"Glucose Entry Out of Range" = "血糖输入超出范围";
+
+/* Alert message for a manual glucose entry out of range error */
+"A manual glucose entry must be between %@ and %@." = "手动输入的血糖值必须在 %@ 和 %@ 之间。";
+
+/* Alert title for a manual glucose entry persistence error */
+"Unable to Save Manual Glucose Entry" = "无法保存手动血糖输入";
+
+/* The alert body for an error while canceling a bolus */
+"Unable to stop the bolus in progress. Move your iPhone closer to the pump and try again. Check your insulin delivery history for details, and monitor your glucose closely." = "无法停止正在进行的胰岛素注射。请将您的 iPhone 移近泵并重试。检查您的胰岛素输送历史记录以获取详细信息，并密切监测您的血糖。";
+
+/* Alert title when glucose data returns while on bolus screen */
+"Glucose Data Now Available" = "血糖数据现在可用";
+
+/* Title for forecast explanation modal on bolus view */
+"Forecasted Glucose" = "预测血糖";
 

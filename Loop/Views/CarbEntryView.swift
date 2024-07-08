@@ -35,7 +35,8 @@ struct CarbEntryView: View, HorizontalSizeClassOverride {
     var body: some View {
         if isNewEntry {
             NavigationView {
-                let title = NSLocalizedString("carb-entry-title-add", value: "Add Carb Entry", comment: "The title of the view controller to create a new carb entry")
+                // let title = NSLocalizedString("carb-entry-title-add", value: "Add Carb Entry", comment: "The title of the view controller to create a new carb entry")
+                let title = NSLocalizedString("Add Carb Entry", comment: "The title of the view controller to create a new carb entry")
                 content
                     .navigationBarTitle(title, displayMode: .inline)
                     .toolbar {
@@ -155,7 +156,7 @@ extension CarbEntryView {
             Image(systemName: "exclamationmark.triangle.fill")
                 .foregroundColor(triangleColor(for: warning))
             
-            Text(warningText(for: warning))
+            Text(NSLocalizedString(warningText(for: warning), comment:"warning Text"))
                 .font(.caption)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -170,12 +171,20 @@ extension CarbEntryView {
         }
     }
     
+//    private func warningText(for warning: CarbEntryViewModel.Warning) -> String {
+//        switch warning {
+//        case .entryIsMissedMeal:
+//            return NSLocalizedString("Loop has detected an missed meal and estimated its size. Edit the carb amount to match the amount of any carbs you may have eaten.", comment: "Warning displayed when user is adding a meal from an missed meal notification")
+//        case .overrideInProgress:
+//            return NSLocalizedString("An active override is modifying your carb ratio and insulin sensitivity. If you don't want this to affect your bolus calculation and projected glucose, consider turning off the override.", comment: "Warning to ensure the carb entry is accurate during an override")
+//        }
+//    }
     private func warningText(for warning: CarbEntryViewModel.Warning) -> String {
         switch warning {
         case .entryIsMissedMeal:
-            return NSLocalizedString("Loop has detected an missed meal and estimated its size. Edit the carb amount to match the amount of any carbs you may have eaten.", comment: "Warning displayed when user is adding a meal from an missed meal notification")
+            return "Loop has detected an missed meal and estimated its size. Edit the carb amount to match the amount of any carbs you may have eaten."
         case .overrideInProgress:
-            return NSLocalizedString("An active override is modifying your carb ratio and insulin sensitivity. If you don't want this to affect your bolus calculation and projected glucose, consider turning off the override.", comment: "Warning to ensure the carb entry is accurate during an override")
+            return "An active override is modifying your carb ratio and insulin sensitivity. If you don't want this to affect your bolus calculation and projected glucose, consider turning off the override."
         }
     }
     

@@ -714,3 +714,76 @@
 /* Caption for bolus screen notice when pump data is missing or stale */
 "Your pump data is stale. %1$@ cannot recommend a bolus amount." = "Your pump data is stale. %1$@ cannot recommend a bolus amount.";
 
+/* Alert title for closed loop off informational modal */
+"Closed Loop OFF" = "Closed Loop OFF";
+
+/* The description text for the looping enabled switch cell when onboarding is not complete */
+"Closed Loop requires Setup to be Complete" = "Closed Loop requires Setup to be Complete";
+
+/* Title for missed meal notifications toggle */
+"Missed Meal Notifications" = "Missed Meal Notifications";
+
+/* Bolus error description: missing maximum bolus in settings. */
+"Missing maximum allowed bolus in settings" = "Missing maximum allowed bolus in settings";
+
+/* The notification title for a meal that was possibly not logged in Loop. */
+"Possible Missed Meal" = "Possible Missed Meal";
+
+/* Title for sheet to enable/disable pre-meal on watch */
+"Pre-Meal" = "Pre-Meal";
+
+/*Title for sheet */
+"New Favorite Food"="New Favorite Food";
+
+/* Message presented in the status row instructing the user to tap this row to stop a bolus */
+"Tap to Stop" = "Tap to Stop";
+
+/* The title of the cell indicating a generic custom preset is enabled */
+"Custom Preset" = "Custom Preset";
+
+/* Caption for bolus screen notice when no bolus is recommended for the predicted glucose */
+"Based on your predicted glucose, no bolus is recommended." = "Based on your predicted glucose, no bolus is recommended.";
+
+/* Caption for bolus screen notice when glucose data is in the future */
+"Check your device time and/or remove any invalid data from Apple Health." = "Check your device time and/or remove any invalid data from Apple Health.";
+
+/* Title for bolus screen notice when glucose data is in the future */
+"Invalid Future Glucose" = "Invalid Future Glucose";
+
+/*Caption for bolus screen notice when no bolus is recommended due to prediction dropping below glucose safety limit*/
+"Your glucose is below or predicted to go below your glucose safety limit, %@."="Your glucose is below or predicted to go below your glucose safety limit, %@.";
+
+/* Alert title for an updated bolus recommendation */
+"Bolus Recommendation Updated" = "Bolus Recommendation Updated";
+
+"The maximum bolus amount is %@ U."="The maximum bolus amount is %@ U."
+
+/* Alert title for a bolus too small validation error */
+"Bolus Too Small" = "Bolus Too Small";
+
+/* Alert message for a missing pump error */
+"A pump must be configured before a bolus can be delivered." = "A pump must be configured before a bolus can be delivered.";
+
+/* Alert title for a carb entry persistence error */
+"Unable to Save Carb Entry" = "Unable to Save Carb Entry";
+
+/* Alert title for a manual glucose entry out of range error
+   Title for bolus screen warning when glucose entry is out of range */
+"Glucose Entry Out of Range" = "Glucose Entry Out of Range";
+
+"A manual glucose entry must be between %@ and %@."="A manual glucose entry must be between %@ and %@.";
+
+/* Alert title for a manual glucose entry persistence error */
+"Unable to Save Manual Glucose Entry" = "Unable to Save Manual Glucose Entry";
+
+/* The alert body for an error while canceling a bolus */
+"Unable to stop the bolus in progress. Move your iPhone closer to the pump and try again. Check your insulin delivery history for details, and monitor your glucose closely." = "Unable to stop the bolus in progress. Move your iPhone closer to the pump and try again. Check your insulin delivery history for details, and monitor your glucose closely.";
+
+/* Alert title when glucose data returns while on bolus screen */
+"Glucose Data Now Available" = "Glucose Data Now Available";
+
+/* Title for forecast explanation modal on bolus view */
+"Forecasted Glucose" = "Forecasted Glucose";
+
+
+

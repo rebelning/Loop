@@ -311,17 +311,17 @@ struct BolusEntryView: View {
             let suspendThresholdString = displayGlucosePreference.format(suspendThreshold)
             return WarningView(
                 title: Text(NSLocalizedString("No Bolus Recommended", comment:"Title for bolus screen notice when no bolus is recommended")),
-                caption: Text("Your glucose is below or predicted to go below your glucose safety limit, \(suspendThresholdString).", comment: "Caption for bolus screen notice when no bolus is recommended due to prediction dropping below glucose safety limit")
+                caption: Text(String(format: NSLocalizedString("Your glucose is below or predicted to go below your glucose safety limit, %@.", comment: "Caption for bolus screen notice when no bolus is recommended due to prediction dropping below glucose safety limit"), suspendThresholdString))
             )
         case .staleGlucoseData:
             return WarningView(
                 title: Text(NSLocalizedString("No Recent Glucose Data", comment: "Title for bolus screen notice when glucose data is missing or stale")),
-                caption: Text("Enter a blood glucose from a meter for a recommended bolus amount.", comment: "Caption for bolus screen notice when glucose data is missing or stale")
+                caption: Text(NSLocalizedString("Enter a blood glucose from a meter for a recommended bolus amount.", comment: "Caption for bolus screen notice when glucose data is missing or stale"))
             )
         case .futureGlucoseData:
             return WarningView(
                 title: Text(NSLocalizedString("Invalid Future Glucose", comment: "Title for bolus screen notice when glucose data is in the future")),
-                caption: Text("Check your device time and/or remove any invalid data from Apple Health.", comment: "Caption for bolus screen notice when glucose data is in the future")
+                caption: Text(NSLocalizedString("Check your device time and/or remove any invalid data from Apple Health.", comment: "Caption for bolus screen notice when glucose data is in the future"))
             )
         case .stalePumpData:
             return WarningView(
@@ -332,7 +332,7 @@ struct BolusEntryView: View {
         case .predictedGlucoseInRange, .glucoseBelowTarget:
             return WarningView(
                 title: Text(NSLocalizedString("No Bolus Recommended", comment: "Title for bolus screen notice when no bolus is recommended")),
-                caption: Text("Based on your predicted glucose, no bolus is recommended.", comment: "Caption for bolus screen notice when no bolus is recommended for the predicted glucose")
+                caption: Text(NSLocalizedString("Based on your predicted glucose, no bolus is recommended.", comment: "Caption for bolus screen notice when no bolus is recommended for the predicted glucose"))
             )
         }
     }
@@ -385,58 +385,58 @@ struct BolusEntryView: View {
         switch alert {
         case .recommendationChanged:
             return SwiftUI.Alert(
-                title: Text("Bolus Recommendation Updated", comment: "Alert title for an updated bolus recommendation"),
-                message: Text("The bolus recommendation has updated. Please reconfirm the bolus amount.", comment: "Alert message for an updated bolus recommendation")
+                title: Text(NSLocalizedString("Bolus Recommendation Updated", comment: "Alert title for an updated bolus recommendation")),
+                message: Text(NSLocalizedString("The bolus recommendation has updated. Please reconfirm the bolus amount.", comment: "Alert message for an updated bolus recommendation"))
             )
         case .maxBolusExceeded:
             guard let maximumBolusAmountString = viewModel.maximumBolusAmountString else {
                 fatalError("Impossible to exceed max bolus without a configured max bolus")
             }
             return SwiftUI.Alert(
-                title: Text("Exceeds Maximum Bolus", comment: "Alert title for a maximum bolus validation error"),
-                message: Text("The maximum bolus amount is \(maximumBolusAmountString) U.", comment: "Alert message for a maximum bolus validation error (1: max bolus value)")
+                title: Text(NSLocalizedString("Exceeds Maximum Bolus", comment: "Alert title for a maximum bolus validation error")),
+                message: Text(String(format: NSLocalizedString("The maximum bolus amount is %@ U.", comment: "Alert message for a maximum bolus validation error (1: max bolus value)"), maximumBolusAmountString))
             )
         case .bolusTooSmall:
             return SwiftUI.Alert(
-                title: Text("Bolus Too Small", comment: "Alert title for a bolus too small validation error"),
-                message: Text("The bolus amount entered is smaller than the minimum deliverable.", comment: "Alert message for a bolus too small validation error")
+                title: Text(NSLocalizedString("Bolus Too Small", comment: "Alert title for a bolus too small validation error")),
+                message: Text(NSLocalizedString("The bolus amount entered is smaller than the minimum deliverable.", comment: "Alert message for a bolus too small validation error"))
             )
         case .noPumpManagerConfigured:
             return SwiftUI.Alert(
-                title: Text("No Pump Configured", comment: "Alert title for a missing pump error"),
-                message: Text("A pump must be configured before a bolus can be delivered.", comment: "Alert message for a missing pump error")
+                title: Text(NSLocalizedString("No Pump Configured", comment: "Alert title for a missing pump error")),
+                message: Text(NSLocalizedString("A pump must be configured before a bolus can be delivered.", comment: "Alert message for a missing pump error"))
             )
         case .noMaxBolusConfigured:
             return SwiftUI.Alert(
-                title: Text("No Maximum Bolus Configured", comment: "Alert title for a missing maximum bolus setting error"),
-                message: Text("The maximum bolus setting must be configured before a bolus can be delivered.", comment: "Alert message for a missing maximum bolus setting error")
+                title: Text(NSLocalizedString("No Maximum Bolus Configured", comment: "Alert title for a missing maximum bolus setting error")),
+                message: Text(NSLocalizedString("The maximum bolus setting must be configured before a bolus can be delivered.", comment: "Alert message for a missing maximum bolus setting error"))
             )
         case .carbEntryPersistenceFailure:
             return SwiftUI.Alert(
-                title: Text("Unable to Save Carb Entry", comment: "Alert title for a carb entry persistence error"),
-                message: Text("An error occurred while trying to save your carb entry.", comment: "Alert message for a carb entry persistence error")
+                title: Text(NSLocalizedString("Unable to Save Carb Entry", comment: "Alert title for a carb entry persistence error")),
+                message: Text(NSLocalizedString("An error occurred while trying to save your carb entry.", comment: "Alert message for a carb entry persistence error"))
             )
         case .manualGlucoseEntryOutOfAcceptableRange:
             let acceptableLowerBound = displayGlucosePreference.format(LoopConstants.validManualGlucoseEntryRange.lowerBound)
             let acceptableUpperBound = displayGlucosePreference.format(LoopConstants.validManualGlucoseEntryRange.upperBound)
             return SwiftUI.Alert(
-                title: Text("Glucose Entry Out of Range", comment: "Alert title for a manual glucose entry out of range error"),
-                message: Text("A manual glucose entry must be between \(acceptableLowerBound) and \(acceptableUpperBound)", comment: "Alert message for a manual glucose entry out of range error")
+                title: Text(NSLocalizedString("Glucose Entry Out of Range", comment: "Alert title for a manual glucose entry out of range error")),
+                message: Text(String(format: NSLocalizedString("A manual glucose entry must be between %@ and %@.", comment: "Alert message for a manual glucose entry out of range error"), acceptableLowerBound, acceptableUpperBound))
             )
         case .manualGlucoseEntryPersistenceFailure:
             return SwiftUI.Alert(
-                title: Text("Unable to Save Manual Glucose Entry", comment: "Alert title for a manual glucose entry persistence error"),
-                message: Text("An error occurred while trying to save your manual glucose entry.", comment: "Alert message for a manual glucose entry persistence error")
+                title: Text(NSLocalizedString("Unable to Save Manual Glucose Entry", comment: "Alert title for a manual glucose entry persistence error")),
+                message: Text(NSLocalizedString("An error occurred while trying to save your manual glucose entry.", comment: "Alert message for a manual glucose entry persistence error"))
             )
         case .glucoseNoLongerStale:
             return SwiftUI.Alert(
-                title: Text("Glucose Data Now Available", comment: "Alert title when glucose data returns while on bolus screen"),
-                message: Text("An updated bolus recommendation is available.", comment: "Alert message when glucose data returns while on bolus screen")
+                title: Text(NSLocalizedString("Glucose Data Now Available", comment: "Alert title when glucose data returns while on bolus screen")),
+                message: Text(NSLocalizedString("An updated bolus recommendation is available.", comment: "Alert message when glucose data returns while on bolus screen"))
             )
         case .forecastInfo:
             return SwiftUI.Alert(
-                title: Text("Forecasted Glucose", comment: "Title for forecast explanation modal on bolus view"),
-                message: Text("The bolus dosing algorithm uses a more conservative estimate of forecasted blood glucose than what is used to adjust your basal rate.\n\nAs a result, your forecasted blood glucose after a bolus may still be higher than your target range.", comment: "Forecast explanation modal on bolus view")
+                title: Text(NSLocalizedString("Forecasted Glucose", comment: "Title for forecast explanation modal on bolus view")),
+                message: Text(NSLocalizedString("The bolus dosing algorithm uses a more conservative estimate of forecasted blood glucose than what is used to adjust your basal rate.\n\nAs a result, your forecasted blood glucose after a bolus may still be higher than your target range.", comment: "Forecast explanation modal on bolus view"))
             )
         }
     }

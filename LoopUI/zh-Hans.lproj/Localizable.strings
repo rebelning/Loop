@@ -31,3 +31,25 @@
 /* Acessibility label describing completion HUD waiting for first run */
 "Waiting for first run" = "等待第一次运行";
 
+/* Alert title for closed loop off informational modal */
+"Closed Loop OFF" = "闭环关闭";
+
+/* The description text for the looping enabled switch cell when onboarding is not complete */
+"Closed Loop requires Setup to be Complete" = "闭环需要完成设置";
+
+/* The notification title for a loop failure */
+"Loop Failure" = "闭环故障";
+
+/* Green closed loop ON message (1: last loop string) (2: app name) */
+"\n%1$@\n\n%2$@ is operating with Closed Loop in the ON position." = "\n%1$@\n\n%2$@ 正在闭环开启状态下运行。";
+
+/* Red loop message (1: last loop string) (2: app name) */
+"\n%1$@\n\nTap your CGM and insulin pump status icons for more information. %2$@ will continue trying to complete a loop, but check for potential communication issues with your pump and CGM." = "\n%1$@\n\n点击您的 CGM 和胰岛素泵状态图标以获取更多信息。%2$@ 将继续尝试完成闭环，但请检查泵和 CGM 的潜在通信问题。";
+
+/* Yellow loop message (1: last loop string) (2: app name) */
+"\n%1$@\n\nTap your CGM and insulin pump status icons for more information. %2$@ will continue trying to complete a loop, but watch for potential communication issues with your pump and CGM." = "\n%1$@\n\n点击您的 CGM 和胰岛素泵状态图标以获取更多信息。%2$@ 将继续尝试完成闭环，但请注意泵和 CGM 的潜在通信问题。";
+
+/* Green closed loop OFF message (1: app name)(2: reason for open loop) */
+"\n%1$@ is operating with Closed Loop in the OFF position. Your pump and CGM will continue operating, but the app will not adjust dosing automatically.\n\n%2$@" = "\n%1$@ 正在闭环关闭状态下运行。您的泵和 CGM 将继续运行，但应用程序将不会自动调整剂量。\n\n%2$@";
+
+
