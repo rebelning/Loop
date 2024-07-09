@@ -785,5 +785,41 @@
 /* Title for forecast explanation modal on bolus view */
 "Forecasted Glucose" = "Forecasted Glucose";
 
+/* Title of the prediction input effect for suspension of insulin delivery */
+"Suspension of Insulin Delivery" = "Suspension of Insulin Delivery";
+
+
+/* Description of the prediction input effect for suspension of insulin delivery */
+"Glucose effect of suspending insulin delivery" = "Glucose effect of suspending insulin delivery";
+
+/* Details for configuration error when glucose target range schedule is missing */
+"Glucose Target Range Schedule" = "Glucose Target Range Schedule";
+
+/* Button text to log a dose
+   Title for dose logging screen */
+"Log Dose" = "Log Dose";
+
+/* The title of the screen displaying a manually entered insulin dose */
+"Logged Insulin Dose" = "Logged Insulin Dose";
+
+/* Title for card to log dose */
+"Dose Summary" = "Dose Summary";
+
+/* Insulin type label */
+"Insulin Type" = "Insulin Type";
+
+/* Segmented button title for insulin delivery log event history */
+"Event History" = "Event History";
+
+"Non-Pump Insulin"="Non-Pump Insulin";
+
+/* Software update button link text */
+"Software Update" = "Software Update";
+
+
+
+
+
+
 
 

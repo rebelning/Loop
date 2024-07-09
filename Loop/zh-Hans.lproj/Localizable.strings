@@ -904,3 +904,33 @@
 /* Title for forecast explanation modal on bolus view */
 "Forecasted Glucose" = "预测血糖";
 
+/* Title of the prediction input effect for suspension of insulin delivery */
+"Suspension of Insulin Delivery" = "胰岛素输送暂停";
+
+/* Description of the prediction input effect for suspension of insulin delivery */
+"Glucose effect of suspending insulin delivery" = "暂停胰岛素输送的血糖效应";
+
+/* Details for configuration error when glucose target range schedule is missing */
+"Glucose Target Range Schedule" = "血糖目标范围时间表";
+
+/* Button text to log a dose
+   Title for dose logging screen */
+"Log Dose" = "记录剂量";
+
+/* The title of the screen displaying a manually entered insulin dose */
+"Logged Insulin Dose" = "记录的胰岛素剂量";
+
+/* Title for card to log dose */
+"Dose Summary" = "剂量摘要";
+
+/* Insulin type label */
+"Insulin Type" = "胰岛素类型";
+
+/* Segmented button title for insulin delivery log event history */
+"Event History" = "事件历史";
+
+"Non-Pump Insulin" = "非泵胰岛素";
+
+/* Software update button link text */
+"Software Update" = "软件更新";
+
