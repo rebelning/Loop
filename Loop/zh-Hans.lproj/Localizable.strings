@@ -945,3 +945,30 @@
 
 /* The title of the alert controller used to select a duration for workout targets */
 "Use Workout Preset" = "使用运动预设";
+
+/* Default alert dismissal
+   The button label of the action used to dismiss an error alert */
+"Dismiss" = "关闭";
+
+/* Status row title for premeal override enabled (leading space is to separate from symbol) */
+" Pre-meal Preset" = " 餐前预设";
+
+"Carb Quantity" = "碳水化合物数量";
+
+"Name" = "名称";
+
+/*placeholder*/
+"Apple"="苹果";
+
+/* Text for save button */
+"Save" = "保存";
+
+/* Button text to save carbs and/or manual glucose entry and deliver a bolus */
+"Save and Deliver" = "保存并输注";
+
+/* Button text to save carbs and/or manual glucose entry without a bolus */
+"Save without Bolusing" = "保存但不输注";
+
+
+
+

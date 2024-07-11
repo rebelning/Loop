@@ -828,6 +828,31 @@
 /* The title of the alert controller used to select a duration for workout targets */
 "Use Workout Preset" = "Use Workout Preset";
 
+/* Default alert dismissal
+   The button label of the action used to dismiss an error alert */
+"Dismiss" = "Dismiss";
+
+/* Status row title for premeal override enabled (leading space is to separate from symbol) */
+" Pre-meal Preset" = " Pre-meal Preset";
+
+"Carb Quantity"="Carb Quantity";
+
+"Name"="Name";
+
+/*placeholder*/
+"Apple"="Apple";
+
+/* Text for save button */
+"Save" = "Save";
+
+/* Button text to save carbs and/or manual glucose entry and deliver a bolus */
+"Save and Deliver" = "Save and Deliver";
+
+/* Button text to save carbs and/or manual glucose entry without a bolus */
+"Save without Bolusing" = "Save without Bolusing";
+
+/*Button text to deliver a bolus*/
+"Deliver"="Deliver";
 
 
 

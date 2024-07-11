@@ -263,13 +263,13 @@ struct SimpleBolusView: View {
             label: {
                 switch viewModel.actionButtonAction {
                 case .saveWithoutBolusing:
-                    return Text("Save without Bolusing", comment: "Button text to save carbs and/or manual glucose entry without a bolus")
+                    return Text(NSLocalizedString("Save without Bolusing", comment: "Button text to save carbs and/or manual glucose entry without a bolus"))
                 case .saveAndDeliver:
-                    return Text("Save and Deliver", comment: "Button text to save carbs and/or manual glucose entry and deliver a bolus")
+                    return Text(NSLocalizedString("Save and Deliver", comment: "Button text to save carbs and/or manual glucose entry and deliver a bolus"))
                 case .enterBolus:
-                    return Text("Enter Bolus", comment: "Button text to begin entering a bolus")
+                    return Text(NSLocalizedString("Enter Bolus", comment: "Button text to begin entering a bolus"))
                 case .deliver:
-                    return Text("Deliver", comment: "Button text to deliver a bolus")
+                    return Text(NSLocalizedString("Deliver", comment: "Button text to deliver a bolus"))
                 }
             }
         )
@@ -282,13 +282,13 @@ struct SimpleBolusView: View {
         switch alert {
         case .carbEntryPersistenceFailure:
             return SwiftUI.Alert(
-                title: Text("Unable to Save Carb Entry", comment: "Alert title for a carb entry persistence error"),
-                message: Text("An error occurred while trying to save your carb entry.", comment: "Alert message for a carb entry persistence error")
+                title: Text(NSLocalizedString("Unable to Save Carb Entry", comment: "Alert title for a carb entry persistence error")),
+                message: Text(NSLocalizedString("An error occurred while trying to save your carb entry.", comment: "Alert message for a carb entry persistence error"))
             )
         case .manualGlucoseEntryPersistenceFailure:
             return SwiftUI.Alert(
-                title: Text("Unable to Save Manual Glucose Entry", comment: "Alert title for a manual glucose entry persistence error"),
-                message: Text("An error occurred while trying to save your manual glucose entry.", comment: "Alert message for a manual glucose entry persistence error")
+                title: Text(NSLocalizedString("Unable to Save Manual Glucose Entry", comment: "Alert title for a manual glucose entry persistence error")),
+                message: Text(NSLocalizedString("An error occurred while trying to save your manual glucose entry.", comment: "Alert message for a manual glucose entry persistence error"))
             )
         case .infoPopup:
             return closedLoopOffInformationalModal()
@@ -314,7 +314,7 @@ struct SimpleBolusView: View {
         case .glucoseWarning:
             let warningThresholdString = formatGlucose(LoopConstants.simpleBolusCalculatorGlucoseWarningLimit)
             return WarningView(
-                title: Text("Low Glucose", comment: "Title for bolus screen warning when glucose is below glucose warning limit."),
+                title: Text(NSLocalizedString("Low Glucose", comment: "Title for bolus screen warning when glucose is below glucose warning limit.")),
                 caption: Text(String(format: NSLocalizedString("Your glucose is below %1$@. Are you sure you want to bolus?", comment: "Format string for simple bolus screen warning when glucose is below glucose warning limit."), warningThresholdString))
             )
         case .glucoseBelowRecommendationLimit:
