@@ -85,6 +85,11 @@ extension DeviceDataManager {
         } else if let url = cgmManager?.appURL,
             UIApplication.shared.canOpenURL(url)
         {
+            if let pluginIdentifier = cgmManager?.pluginIdentifier, pluginIdentifier == "WTScoutRemoteCGM" {
+                
+                return nil
+            }
+
             return .openAppURL(url)
         } else if let cgmManagerUI = (cgmManager as? CGMManagerUI) {
             return .presentViewController(cgmManagerUI.settingsViewController(bluetoothProvider: bluetoothProvider, displayGlucosePreference: displayGlucosePreference, colorPalette: .default, allowDebugFeatures: FeatureFlags.allowDebugFeatures))
