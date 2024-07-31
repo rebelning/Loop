@@ -81,7 +81,7 @@ extension UIAlertController {
 
         for availablePumpManager in availablePumpManagers {
             addAction(UIAlertAction(
-                title: availablePumpManager.localizedTitle,
+                title: NSLocalizedString(availablePumpManager.localizedTitle,comment: "Title for Pump manager option in the alert"),
                 style: .default,
                 handler: { (_) in
                     selectionHandler(availablePumpManager.identifier)
@@ -105,7 +105,7 @@ extension UIAlertController {
         
         for availableCGMManager in availableCGMManagers.sorted(by: {$0.localizedTitle < $1.localizedTitle}) {
             addAction(UIAlertAction(
-                title: availableCGMManager.localizedTitle,
+                title:NSLocalizedString(availableCGMManager.localizedTitle, comment:"Title for CGM manager option in the alert") ,
                 style: .default,
                 handler: { (_) in
                     selectionHandler(availableCGMManager.identifier)
