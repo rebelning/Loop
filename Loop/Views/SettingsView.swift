@@ -339,7 +339,7 @@ extension SettingsView {
     
     private var pumpChoices: [ActionSheet.Button] {
         var result = viewModel.pumpManagerSettingsViewModel.availableDevices.map { availableDevice in
-            ActionSheet.Button.default(Text(availableDevice.localizedTitle)) {
+            ActionSheet.Button.default(Text(NSLocalizedString(availableDevice.localizedTitle,comment: "Title for Pump manager option in the alert"))) {
                 self.viewModel.pumpManagerSettingsViewModel.didTapAdd(availableDevice)
             }
         }
@@ -378,7 +378,7 @@ extension SettingsView {
         var result = viewModel.cgmManagerSettingsViewModel.availableDevices
             .sorted(by: {$0.localizedTitle < $1.localizedTitle})
             .map { availableDevice in
-                ActionSheet.Button.default(Text(availableDevice.localizedTitle)) {
+                ActionSheet.Button.default(Text(NSLocalizedString(availableDevice.localizedTitle,comment: "Title for CGM manager option in the alert"))) {
                     self.viewModel.cgmManagerSettingsViewModel.didTapAdd(availableDevice)
             }
         }
