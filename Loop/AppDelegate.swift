@@ -8,6 +8,7 @@
 
 import UIKit
 import LoopKit
+import BackgroundTasks
 
 final class AppDelegate: UIResponder, UIApplicationDelegate, WindowProvider {
     var window: UIWindow?
@@ -26,6 +27,16 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, WindowProvider {
 
         loopAppManager.initialize(windowProvider: self, launchOptions: launchOptions)
         loopAppManager.launch()
+        // MARK: - registerBackgroundProcessingTask
+        let registered  = DeviceDataManager.registerBackgroundProcessingTask { task in
+                    let deviceDataManager = self.loopAppManager.getDeviceDataManager()
+                    deviceDataManager.handleBackgroundProcessingTask(task)
+        }
+        if registered {
+            NSLog("Background processing task registered successfully.")
+        } else {
+            NSLog("Failed to register background processing task.")
+        }
         return loopAppManager.isLaunchComplete
     }
 
@@ -43,6 +54,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, WindowProvider {
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         log.default(#function)
+        let deviceDataManager = self.loopAppManager.getDeviceDataManager()
+        deviceDataManager.scheduleBackgroundProcessingTask()
+
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -103,4 +117,21 @@ final class AppDelegate: UIResponder, UIApplicationDelegate, WindowProvider {
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         return loopAppManager.supportedInterfaceOrientations
     }
+    
+    // MARK: - UIApplicationDelegate - performFetchWithCompletionHandler
+    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+            log.default("Performing background fetch")
+            loopAppManager.performFetch { result in
+                switch result {
+                case .newData:
+                    completionHandler(.newData)
+                case .noData:
+                    completionHandler(.noData)
+                case .failed:
+                    completionHandler(.failed)
+                @unknown default:
+                    completionHandler(.failed)
+                }
+            }
+        }
 }

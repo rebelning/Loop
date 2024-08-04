@@ -8,6 +8,7 @@
 	<string>$(APP_STORE_URL)</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
+		<string>com.loopkit.background-task.fetch-cgm-data</string>
 		<string>com.loopkit.background-task.critical-event-log.historical-export</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
@@ -80,7 +81,9 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>audio</string>
 		<string>bluetooth-central</string>
+		<string>fetch</string>
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>

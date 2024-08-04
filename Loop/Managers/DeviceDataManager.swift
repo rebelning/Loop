@@ -14,6 +14,8 @@ import LoopCore
 import LoopTestingKit
 import UserNotifications
 import Combine
+import AVFoundation
+import AudioToolbox
 
 final class DeviceDataManager {
 
@@ -238,6 +240,14 @@ final class DeviceDataManager {
     // MARK: - Initialization
 
     private(set) var loopManager: LoopDataManager!
+    
+    // MARK: - cgmFetchTimer
+    private var cgmFetchTimer: Timer?
+    
+    private var playSoundTimer: RepeatingTimer?
+
+    /// AVAudioPlayer to use
+    private var audioPlayer: AVAudioPlayer?
 
     init(pluginManager: PluginManager,
          alertManager: AlertManager,
@@ -450,7 +460,12 @@ final class DeviceDataManager {
         
         setupPump()
         setupCGM()
-                
+        
+        //
+        initAudio()
+        
+        enableSuspensionPrevention()
+        //
         cgmStalenessMonitor.$cgmDataIsStale
             .combineLatest($cgmHasValidSensorSession)
             .map { $0 == false || $1 }
@@ -473,6 +488,7 @@ final class DeviceDataManager {
                 }
             }
         }
+       
     }
 
     var availablePumpManagers: [PumpManagerDescriptor] {
@@ -1104,14 +1120,32 @@ extension DeviceDataManager: PumpManagerDelegate {
     }
     
     func refreshDeviceData() {
-        refreshCGM() {
-            self.queue.async {
-                guard let pumpManager = self.pumpManager, pumpManager.isOnboarded else {
-                    return
+//        refreshCGM() {
+//            self.queue.async {
+//                guard let pumpManager = self.pumpManager, pumpManager.isOnboarded else {
+//                    return
+//                }
+//                pumpManager.ensureCurrentPumpData(completion: nil)
+//            }
+//        }
+        if cgmManager == nil {
+                log.default("No CGM Manager available")
+                self.queue.async {
+                    guard let pumpManager = self.pumpManager, pumpManager.isOnboarded else {
+                        return
+                    }
+                    pumpManager.ensureCurrentPumpData(completion: nil)
                 }
-                pumpManager.ensureCurrentPumpData(completion: nil)
+            } else {
+                refreshCGM() {
+                    self.queue.async {
+                        guard let pumpManager = self.pumpManager, pumpManager.isOnboarded else {
+                            return
+                        }
+                        pumpManager.ensureCurrentPumpData(completion: nil)
+                    }
+                }
             }
-        }
     }
 
     func pumpManagerMustProvideBLEHeartbeat(_ pumpManager: PumpManager) -> Bool {
@@ -1748,4 +1782,147 @@ extension DeviceDataManager: DeviceStatusProvider {}
 
 extension DeviceDataManager {
     var detectedSystemTimeOffset: TimeInterval { trustedTimeChecker.detectedSystemTimeOffset }
+}
+
+extension DeviceDataManager {
+    private static var backgroundProcessingTaskIdentifier: String { "com.loopkit.background-task.fetch-cgm-data" }
+    /// constant for key in ApplicationManager.shared.addClosureToRunWhenAppWillEnterForeground - create playsoundtimer
+    private  var applicationManagerKeyResumePlaySoundTimer: String { "LoopDeviceDataManager-ResumePlaySoundTimer"}
+    
+    /// constant for key in ApplicationManager.shared.addClosureToRunWhenAppDidEnterBackground - invalidate playsoundtimer
+    private  var applicationManagerKeySuspendPlaySoundTimer: String { "LoopDeviceDataManager-SuspendPlaySoundTimer"}
+    
+    public static func registerBackgroundProcessingTask(_ handler: @escaping (BGProcessingTask) -> Void) -> Bool {
+//        return BGTaskScheduler.shared.register(forTaskWithIdentifier: backgroundProcessingTaskIdentifier, using: nil) { handler($0 as! BGProcessingTask) }
+        return BGTaskScheduler.shared.register(forTaskWithIdentifier: backgroundProcessingTaskIdentifier, using: nil) { task in
+                    NSLog("Handling background processing task")
+                    handler(task as! BGProcessingTask)
+        }
+    }
+
+    public func handleBackgroundProcessingTask(_ task: BGProcessingTask) {
+        dispatchPrecondition(condition: .notOnQueue(.main))
+
+        scheduleBackgroundProcessingTask(isRetry: true)
+
+        
+        //
+        task.expirationHandler = {
+            self.log.default("Background processing task expired - cancelling")
+            self.cgmFetchTimer?.invalidate()
+        }
+
+        DispatchQueue.global(qos: .background).async {
+            self.log.default("Background processing task - startCGMFetchTimer")
+            self.startCGMFetchTimer()
+            task.setTaskCompleted(success: true)
+        }
+    }
+
+    public func scheduleBackgroundProcessingTask(isRetry: Bool = false) {
+        do {
+            let request = BGProcessingTaskRequest(identifier: Self.backgroundProcessingTaskIdentifier)
+            request.earliestBeginDate = Date(timeIntervalSinceNow: 1 * 60) // 15 minutes from now
+//            request.requiresExternalPower = true
+            request.requiresNetworkConnectivity = true //
+            request.requiresExternalPower = false //
+
+            try BGTaskScheduler.shared.submit(request)
+            //
+//            enableSuspensionPrevention()
+            //
+            log.default("Scheduled background processing task")
+        } catch {
+            log.error("Failed to schedule background processing task: %{public}@", String(describing: error))
+
+        }
+    }
+
+//    private var cgmFetchTimer: Timer?
+
+    private func startCGMFetchTimer() {
+        DispatchQueue.main.async {
+            self.log.default("Starting CGM fetch timer")
+            self.cgmFetchTimer?.invalidate()
+            self.cgmFetchTimer = Timer.scheduledTimer(withTimeInterval: 3 * 60, repeats: true) { [weak self] _ in
+                self?.fetchCGMData()
+            }
+        }
+    }
+
+    private func fetchCGMData() {
+        self.log.default("Fetching CGM data")
+    
+        self.refreshDeviceData()
+    
+    }
+    // MARK: -
+    private func initAudio(){
+         let soundFileName = "1-millisecond-of-silence.caf"//20ms-of-silence.caf"
+        // set up audioplayer
+        if let url = Bundle.main.url(forResource: soundFileName, withExtension: "")  {
+            
+            // create audioplayer
+            do {
+                
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                
+            } catch {
+                
+                self.log.debug("in init, exception while trying to create audoplayer, error = %{public}@",String(describing: error))
+                
+            }
+            
+        }
+    }
+    // MARK: -
+    private func disableSuspensionPrevention() {
+        
+        // stop the timer for now, might be already suspended but doesn't harm
+        if let playSoundTimer = playSoundTimer {
+            playSoundTimer.suspend()
+        }
+        
+        // no need anymore to resume the player when coming in foreground
+        ApplicationManager.shared.removeClosureToRunWhenAppDidEnterBackground(key: applicationManagerKeyResumePlaySoundTimer)
+        
+        // no need anymore to suspend the soundplayer when entering foreground, because it's not even resumed
+        ApplicationManager.shared.removeClosureToRunWhenAppWillEnterForeground(key: applicationManagerKeySuspendPlaySoundTimer)
+        
+    }
+    /// launches timer that will regular play sound - this will be played only when app goes to background and only if the user wants to keep the app alive
+    private func enableSuspensionPrevention() {
+        
+        let intervalNormal = 5
+        // create playSoundTimer depending on the keep-alive type selected
+        playSoundTimer = RepeatingTimer(timeInterval: TimeInterval(Double(intervalNormal)), eventHandler: {
+            // play the sound
+            
+            self.log.debug("in eventhandler checking if audioplayer exists")
+            
+            if let audioPlayer = self.audioPlayer, !audioPlayer.isPlaying {
+              
+                audioPlayer.play()
+            }
+        })
+        
+        // schedulePlaySoundTimer needs to be created when app goes to background
+        ApplicationManager.shared.addClosureToRunWhenAppDidEnterBackground(key: applicationManagerKeyResumePlaySoundTimer) {
+            self.log.debug("addClosureToRunWhenAppDidEnterBackground...")
+            if let playSoundTimer = self.playSoundTimer {
+                playSoundTimer.resume()
+            }
+            if let audioPlayer = self.audioPlayer, !audioPlayer.isPlaying {
+                audioPlayer.play()
+            }
+        }
+        // schedulePlaySoundTimer needs to be invalidated when app goes to foreground
+        ApplicationManager.shared.addClosureToRunWhenAppWillEnterForeground(key: applicationManagerKeySuspendPlaySoundTimer) {
+            self.log.debug("addClosureToRunWhenAppWillEnterForeground...")
+            if let playSoundTimer = self.playSoundTimer {
+                playSoundTimer.suspend()
+            }
+        }
+
+    }
 }

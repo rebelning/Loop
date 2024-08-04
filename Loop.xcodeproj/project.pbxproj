@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		133544552C5DFAEE00BF3DA6 /* RepeatingTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133544542C5DFAEE00BF3DA6 /* RepeatingTimer.swift */; };
+		1335445A2C5E00C600BF3DA6 /* 1-millisecond-of-silence.caf in Resources */ = {isa = PBXBuildFile; fileRef = 133544592C5E00C600BF3DA6 /* 1-millisecond-of-silence.caf */; };
+		1335445C2C5E084200BF3DA6 /* ApplicationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1335445B2C5E084200BF3DA6 /* ApplicationManager.swift */; };
 		1419606428D9550400BA86E0 /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 437AFEE6203688CF008C4892 /* LoopKitUI.framework */; };
 		1419606928D9554E00BA86E0 /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 437AFEE6203688CF008C4892 /* LoopKitUI.framework */; };
 		1419606A28D955BC00BA86E0 /* MockKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C101947127DD473C004E7EB8 /* MockKitUI.framework */; };
@@ -743,6 +746,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		133544542C5DFAEE00BF3DA6 /* RepeatingTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepeatingTimer.swift; sourceTree = "<group>"; };
+		133544592C5E00C600BF3DA6 /* 1-millisecond-of-silence.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "1-millisecond-of-silence.caf"; sourceTree = "<group>"; };
+		1335445B2C5E084200BF3DA6 /* ApplicationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationManager.swift; sourceTree = "<group>"; };
 		13B65A882C36AACA00A27921 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		142CB7582A60BF2E0075748A /* EditMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditMode.swift; sourceTree = "<group>"; };
 		142CB75A2A60BFC30075748A /* FavoriteFoodsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteFoodsView.swift; sourceTree = "<group>"; };
@@ -1827,6 +1833,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		133544562C5E002A00BF3DA6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		133544572C5E00C600BF3DA6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				133544582C5E00C600BF3DA6 /* sounds */,
+			);
+			name = Resources;
+			path = Loop/Resources;
+			sourceTree = "<group>";
+		};
+		133544582C5E00C600BF3DA6 /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				133544592C5E00C600BF3DA6 /* 1-millisecond-of-silence.caf */,
+			);
+			path = sounds;
+			sourceTree = "<group>";
+		};
 		14B1736128AED9EC006CCD7C /* Loop Widget Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -1968,6 +1998,7 @@
 		43776F831B8022E90074EA36 = {
 			isa = PBXGroup;
 			children = (
+				133544572C5E00C600BF3DA6 /* Resources */,
 				C18A491122FCC20B00FDA733 /* Scripts */,
 				4FF4D0FA1E1834BD00846527 /* Common */,
 				43776F8E1B8022E90074EA36 /* Loop */,
@@ -2008,6 +2039,7 @@
 		43776F8E1B8022E90074EA36 /* Loop */ = {
 			isa = PBXGroup;
 			children = (
+				133544562C5E002A00BF3DA6 /* Resources */,
 				C16DA84022E8E104008624C2 /* Plugins */,
 				7D7076651FE06EE4004AC8EA /* Localizable.strings */,
 				7D7076511FE06EE1004AC8EA /* InfoPlist.strings */,
@@ -2182,6 +2214,8 @@
 		43E344A01B9E144300C85C07 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				1335445B2C5E084200BF3DA6 /* ApplicationManager.swift */,
+				133544542C5DFAEE00BF3DA6 /* RepeatingTimer.swift */,
 				A98556842493F901000FD662 /* AlertStore+SimulatedCoreData.swift */,
 				C1D289B422F90A52003FFBD9 /* BasalDeliveryState.swift */,
 				A9F703722489BC8500C98AD8 /* CarbStore+SimulatedCoreData.swift */,
@@ -3363,6 +3397,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C13255D6223E7BE2008AF50C /* BolusProgressTableViewCell.xib in Resources */,
+				1335445A2C5E00C600BF3DA6 /* 1-millisecond-of-silence.caf in Resources */,
 				C1EE9E812A38D0FB0064784A /* BuildDetails.plist in Resources */,
 				43FCBBC21E51710B00343C1B /* LaunchScreen.storyboard in Resources */,
 				B405E35A24D2B1A400DD058D /* HUDAssets.xcassets in Resources */,
@@ -3710,6 +3745,7 @@
 				E95D380524EADF78005E2F50 /* GlucoseStoreProtocol.swift in Sources */,
 				43E3449F1B9D68E900C85C07 /* StatusTableViewController.swift in Sources */,
 				B42D124328D371C400E43D22 /* AlertMuter.swift in Sources */,
+				1335445C2C5E084200BF3DA6 /* ApplicationManager.swift in Sources */,
 				A96DAC242838325900D94E38 /* DiagnosticLog.swift in Sources */,
 				A9CBE45A248ACBE1008E7BA2 /* DosingDecisionStore+SimulatedCoreData.swift in Sources */,
 				A9C62D8A2331703100535612 /* ServicesManager.swift in Sources */,
@@ -3734,6 +3770,7 @@
 				1DB1065124467E18005542BD /* AlertManager.swift in Sources */,
 				1D9650C82523FBA100A1370B /* DeviceDataManager+BolusEntryViewModelDelegate.swift in Sources */,
 				43C0944A1CACCC73001F6403 /* NotificationManager.swift in Sources */,
+				133544552C5DFAEE00BF3DA6 /* RepeatingTimer.swift in Sources */,
 				149A28E42A8A63A700052EDF /* FavoriteFoodDetailView.swift in Sources */,
 				1DDE274024AEA4F200796622 /* NotificationsCriticalAlertPermissionsView.swift in Sources */,
 				A9A056B524B94123007CF06D /* CriticalEventLogExportViewModel.swift in Sources */,

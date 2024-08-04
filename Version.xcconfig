@@ -8,7 +8,7 @@
 
 // Version [DEFAULT]
 LOOP_MARKETING_VERSION = 3.3.0
-CURRENT_PROJECT_VERSION = 82
+CURRENT_PROJECT_VERSION = 84
 
 // Optional override
 #include? "VersionOverride.xcconfig"

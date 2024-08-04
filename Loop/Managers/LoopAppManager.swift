@@ -148,7 +148,9 @@ class LoopAppManager: NSObject {
         
         askUserToConfirmLoopReset()
     }
-
+    func getDeviceDataManager() -> DeviceDataManager {
+            return deviceDataManager
+    }
     private func checkProtectedDataAvailable() {
         dispatchPrecondition(condition: .onQueue(.main))
         precondition(state == .checkProtectedDataAvailable)
@@ -445,6 +447,13 @@ class LoopAppManager: NSObject {
     private var rootViewController: UIViewController? {
         get { windowProvider?.window?.rootViewController }
         set { windowProvider?.window?.rootViewController = newValue }
+    }
+    
+    
+    // MARK: performFetch
+    func performFetch(completion: @escaping (UIBackgroundFetchResult) -> Void) {
+        deviceDataManager.refreshDeviceData()
+        completion(.newData)
     }
 }
 
