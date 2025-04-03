@@ -565,10 +565,10 @@ final class DeviceDataManager {
     }
     
     private func checkPumpDataAndLoop() {
-        guard !crashRecoveryManager.pendingCrashRecovery else {
-            self.log.default("Loop paused pending crash recovery acknowledgement.")
-            return
-        }
+//        guard !crashRecoveryManager.pendingCrashRecovery else {
+//            self.log.default("Loop paused pending crash recovery acknowledgement.")
+//            return
+//        }
 
         self.log.default("Asserting current pump data")
         guard let pumpManager = pumpManager else {
