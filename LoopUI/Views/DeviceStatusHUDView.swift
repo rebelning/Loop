@@ -32,8 +32,17 @@ import LoopKitUI
             // round the edges of the progress view
             progressView.layer.cornerRadius = 2
             progressView.clipsToBounds = true
-            progressView.layer.sublayers![1].cornerRadius = 2
-            progressView.subviews[1].clipsToBounds = true
+//            progressView.layer.sublayers![1].cornerRadius = 2
+//            progressView.subviews[1].clipsToBounds = true
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self, let fillLayer = self.progressView.layer.sublayers?.last else { return }
+                fillLayer.cornerRadius = 2
+                fillLayer.masksToBounds = true
+                
+                if self.progressView.subviews.count > 1 {
+                    self.progressView.subviews[1].clipsToBounds = true
+                }
+            }
         }
     }
     
