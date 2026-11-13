@@ -18,34 +18,29 @@ struct BolusEntryView: View {
     @EnvironmentObject private var displayGlucosePreference: DisplayGlucosePreference
     @Environment(\.dismissAction) var dismiss
     @Environment(\.appName) var appName
-    
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     @ObservedObject var viewModel: BolusEntryViewModel
 
     @State private var enteredBolusString = ""
-    @State private var shouldBolusEntryBecomeFirstResponder = false
-
     @State private var isInteractingWithChart = false
-    @State private var pickerShouldExpand = false
     @State private var editedBolusAmount = false
+
+    @FocusState private var bolusFieldFocused: Bool
+
+    private var accessoryClearance: CGFloat {
+        dynamicTypeSize.isAccessibilitySize ? 72 : 52
+    }
 
     var body: some View {
         GeometryReader { geometry in
-            List {
-                self.chartSection
-                self.summarySection
-            }
-            // As of iOS 13, we can't programmatically scroll to the Bolus entry text field.  This ugly hack scoots the
-            // list up instead, so the summarySection is visible and the keyboard shows when you tap "Enter Bolus".
-            // Unfortunately, after entry, the field scoots back down and remains hidden.  So this is not a great solution.
-            // TODO: Fix this in Xcode 12 when we're building for iOS 14.
-            .padding(.top, self.shouldAutoScroll(basedOn: geometry) ? -200 : -28)
-            .insetGroupedListStyle()
-            .safeAreaInset(edge: .bottom, spacing: 0) {
-                self.actionArea
-            }
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)) { _ in
-                // Ensure tapping 'Enter Bolus' can make the text field the first responder again.
-                self.shouldBolusEntryBecomeFirstResponder = false
+            VStack(spacing: 0) {
+                List {
+                    self.chartSection
+                    self.summarySection
+                }
+                .insetGroupedListStyle()
+                
             }
             .navigationBarTitle(self.title)
             .supportedInterfaceOrientations(.portrait)
@@ -63,6 +58,14 @@ struct BolusEntryView: View {
                     enteredBolusStringBinding.wrappedValue = newEnteredBolusString
                 }
             }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                if bolusFieldFocused {
+                    // Reserve space so the toolbar doesn’t overlap the field
+                    Color.clear.frame(height: accessoryClearance)
+                } else {
+                    actionArea
+                }
+            }
         }
     }
     
@@ -73,12 +76,6 @@ struct BolusEntryView: View {
         return Text("Meal Bolus", comment: "Title for bolus entry screen when also entering carbs")
     }
 
-    private func shouldAutoScroll(basedOn geometry: GeometryProxy) -> Bool {
-        // Taking a guess of 640 to cover iPhone SE, iPod Touch, and other smaller devices.
-        // Devices such as the iPhone 11 Pro Max do not need to auto-scroll.
-        return shouldBolusEntryBecomeFirstResponder && geometry.size.height > 640
-    }
-    
     private var chartSection: some View {
         Section {
             VStack(spacing: 8) {
@@ -243,18 +240,31 @@ struct BolusEntryView: View {
             Text("Bolus", comment: "Label for bolus entry row on bolus screen")
             Spacer()
             HStack(alignment: .firstTextBaseline) {
-                DismissibleKeyboardTextField(
-                    text: enteredBolusStringBinding,
-                    placeholder: viewModel.formatBolusAmount(0.0),
-                    font: .preferredFont(forTextStyle: .title1),
-                    textColor: .loopAccent,
-                    textAlignment: .right,
-                    keyboardType: .decimalPad,
-                    shouldBecomeFirstResponder: shouldBolusEntryBecomeFirstResponder,
-                    maxLength: 5,
-                    doneButtonColor: .loopAccent,
-                    textFieldDidBeginEditing: didBeginEditing
-                )
+                TextField(viewModel.formatBolusAmount(0.0), text: enteredBolusStringBinding)
+                    .keyboardType(.decimalPad)
+                    .textInputAutocapitalization(.never)
+                    .disableAutocorrection(true)
+                    .font(.title)
+                    .multilineTextAlignment(.trailing)
+                    .foregroundColor(.loopAccent)
+                    .focused($bolusFieldFocused)
+                    .onChange(of: bolusFieldFocused) { focused in
+                        if focused {
+                            didBeginEditing()
+                        }
+                    }
+                    .onChange(of: enteredBolusString) { newValue in
+                        if newValue.count > 5 {
+                            enteredBolusString = String(newValue.prefix(5))
+                            viewModel.updateEnteredBolus(enteredBolusString)
+                        }
+                    }
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            Spacer()
+                            Button("Done") { bolusFieldFocused = false }
+                        }
+                    }
                 bolusUnitsLabel
             }
         }
@@ -344,7 +354,7 @@ struct BolusEntryView: View {
         Button<Text>(
             action: {
                 if self.viewModel.actionButtonAction == .enterBolus {
-                    self.shouldBolusEntryBecomeFirstResponder = true
+                    self.bolusFieldFocused = true
                 } else {
                     Task {
                         if await self.viewModel.didPressActionButton() {
@@ -358,7 +368,7 @@ struct BolusEntryView: View {
                 case .saveWithoutBolusing:
                     return Text(NSLocalizedString("Save without Bolusing", comment: "Button text to save carbs and/or manual glucose entry without a bolus"))
                 case .saveAndDeliver:
-                    return Text(NSLocalizedString("Save and Deliver", comment: "Button text to save carbs and/or manual glucose entry and deliver a bolus"))
+                    return Text("Save Carbs & Deliver", comment: "Button text to save carbs and/or manual glucose entry and deliver a bolus")
                 case .enterBolus:
                     return Text(NSLocalizedString("Enter Bolus", comment: "Button text to begin entering a bolus"))
                 case .deliver:
@@ -453,7 +463,7 @@ struct LabeledQuantity: View {
 
     var valueText: Text {
         guard let quantity = quantity else {
-            return Text("– –")
+            return Text(verbatim: "– –")
         }
         
         let formatter = QuantityFormatter(for: unit)
@@ -464,7 +474,7 @@ struct LabeledQuantity: View {
 
         guard let string = formatter.string(from: quantity) else {
             assertionFailure("Unable to format \(String(describing: quantity)) \(unit)")
-            return Text("")
+            return Text(verbatim: "")
         }
 
         return Text(string)

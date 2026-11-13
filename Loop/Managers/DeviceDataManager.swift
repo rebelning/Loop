@@ -45,6 +45,8 @@ final class DeviceDataManager {
     
     @Published var cgmHasValidSensorSession: Bool
 
+    private var cgmDeviceModel: String?
+
     @Published var pumpIsAllowingAutomation: Bool
 
     private var lastCGMLoopTrigger: Date = .distantPast
@@ -551,7 +553,18 @@ final class DeviceDataManager {
             return nil
         }
 
-        return pumpManagerTypeByIdentifier(managerIdentifier)
+        if let pumpManager = pumpManagerTypeByIdentifier(managerIdentifier) {
+            return pumpManager
+        }
+
+        /// The pumpManager was not found for managerIdentifier. If this was for an "Omnipod" (OmniKit) or
+        /// "Omnipod-DASH" (OmniBLE), have the universal "Omni" pumpManager (OmnipodKit) handle instead.
+        let OmniStr = "Omni"
+        if managerIdentifier.hasPrefix(OmniStr) {
+            return pumpManagerTypeByIdentifier(OmniStr)
+        }
+
+        return nil
     }
 
     func pumpManagerFromRawValue(_ rawValue: [String: Any]) -> PumpManagerUI? {
@@ -586,6 +599,9 @@ final class DeviceDataManager {
         switch readingResult {
         case .newData(let values):
             loopManager.addGlucoseSamples(values) { result in
+                if case .success(let samples) = result {
+                    self.analyticsServicesManager.didStoreGlucose(samples)
+                }
                 if !values.isEmpty {
                     DispatchQueue.main.async {
                         self.cgmStalenessMonitor.cgmGlucoseSamplesAvailable(values)
@@ -738,6 +754,8 @@ private extension DeviceDataManager {
             cgmHasValidSensorSession = cgmManager.cgmManagerStatus.hasValidSensorSession
 
             analyticsServicesManager.identifyCGMType(cgmManager.pluginIdentifier)
+            cgmDeviceModel = cgmManager.cgmManagerStatus.device?.model
+            analyticsServicesManager.identifyCGMModel(cgmDeviceModel)
         }
 
         if let cgmManagerUI = cgmManager as? CGMManagerUI {
@@ -768,6 +786,7 @@ private extension DeviceDataManager {
             deliveryUncertaintyAlertManager = DeliveryUncertaintyAlertManager(pumpManager: pumpManager, alertPresenter: alertPresenter)
 
             analyticsServicesManager.identifyPumpType(pumpManager.pluginIdentifier)
+            analyticsServicesManager.identifyPumpModel(pumpManager.status.device.model)
 
             updatePumpManagerBLEHeartbeatPreference()
         }
@@ -935,7 +954,17 @@ extension DeviceDataManager {
     }
 
     func updatePumpManagerBLEHeartbeatPreference() {
-        pumpManager?.setMustProvideBLEHeartbeat(pumpManagerMustProvideBLEHeartbeat)
+        guard pumpManagerMustProvideBLEHeartbeat else {
+            pumpManager?.setBLEHeartbeatRequest(nil)
+            return
+        }
+        // Tell the pump when the last CGM reading landed and how often readings are expected, so it can
+        // schedule its next heartbeat to arrive just after the next reading is due (the pump adds its own
+        // buffer for the remote CGM value to be fetched and stored).
+        let request = PumpHeartbeatRequest(
+            lastCGMReadingDate: glucoseStore.latestGlucose?.startDate,
+            expectedCGMReadingInterval: cgmManager?.expectedGlucoseSampleInterval ?? .minutes(5))
+        pumpManager?.setBLEHeartbeatRequest(request)
     }
 }
 
@@ -945,7 +974,11 @@ extension DeviceDataManager: DeviceManagerDelegate {
     func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?) {
         deviceLog.log(managerIdentifier: manager.pluginIdentifier, deviceIdentifier: deviceIdentifier, type: type, message: message, completion: completion)
     }
-    
+
+    func deviceManager(_ manager: DeviceManager, recordAnalyticsEvent name: String, properties: [AnyHashable: Any]?) {
+        analyticsServicesManager.deviceManagerDidRecordEvent(name, properties: properties)
+    }
+
     var allowDebugFeatures: Bool {
         FeatureFlags.allowDebugFeatures // NOTE: DEBUG FEATURES - DEBUG AND TEST ONLY
     }
@@ -1046,6 +1079,10 @@ extension DeviceDataManager: CGMManagerDelegate {
             if self.cgmHasValidSensorSession != status.hasValidSensorSession {
                 self.cgmHasValidSensorSession = status.hasValidSensorSession
             }
+            if self.cgmDeviceModel != status.device?.model {
+                self.cgmDeviceModel = status.device?.model
+                self.analyticsServicesManager.identifyCGMModel(self.cgmDeviceModel)
+            }
         }
     }
 }
@@ -1103,10 +1140,6 @@ extension DeviceDataManager: PumpManagerDelegate {
         }
 
         cgmManager.fetchNewDataIfNeeded { (result) in
-            if case .newData = result {
-                self.analyticsServicesManager.didFetchNewCGMData()
-            }
-
             self.queue.async {
                 self.processCGMReadingResult(cgmManager, readingResult: result) {
                     if self.loopManager.lastLoopCompleted == nil || self.loopManager.lastLoopCompleted!.timeIntervalSinceNow < -.minutes(4.2) {
@@ -1166,6 +1199,10 @@ extension DeviceDataManager: PumpManagerDelegate {
         log.default("PumpManager:%{public}@ did update status: %{public}@", String(describing: type(of: pumpManager)), String(describing: status))
 
         doseStore.device = status.device
+
+        if status.device.model != oldStatus.device.model {
+            analyticsServicesManager.identifyPumpModel(status.device.model)
+        }
         
         if let newBatteryValue = status.pumpBatteryChargeRemaining,
            let oldBatteryValue = oldStatus.pumpBatteryChargeRemaining,
@@ -1734,17 +1771,25 @@ extension DeviceDataManager: DeviceSupportDelegate {
                         deviceLogReport = entries.map { "* \($0.timestamp) \($0.managerIdentifier) \($0.deviceIdentifier ?? "") \($0.type) \($0.message)" }.joined(separator: "\n")
                     }
 
+                    let submodulesInfo = BuildDetails.default.submodules
+                        .sorted(by: { $0.key < $1.key })
+                        .map { key, value in
+                            "*   \(key): \(value.branch), \(value.commitSHA)"
+                        }
+                        .joined(separator: "\n")
+
                     let report = [
                         "## Build Details",
                         "* appNameAndVersion: \(Bundle.main.localizedNameAndVersion)",
                         "* profileExpiration: \(BuildDetails.default.profileExpirationString)",
-                        "* gitRevision: \(BuildDetails.default.gitRevision ?? "N/A")",
-                        "* gitBranch: \(BuildDetails.default.gitBranch ?? "N/A")",
-                        "* workspaceGitRevision: \(BuildDetails.default.workspaceGitRevision ?? "N/A")",
-                        "* workspaceGitBranch: \(BuildDetails.default.workspaceGitBranch ?? "N/A")",
                         "* sourceRoot: \(BuildDetails.default.sourceRoot ?? "N/A")",
                         "* buildDateString: \(BuildDetails.default.buildDateString ?? "N/A")",
                         "* xcodeVersion: \(BuildDetails.default.xcodeVersion ?? "N/A")",
+                        "* Workspace branch: \(BuildDetails.default.workspaceGitBranch ?? "N/A")",
+                        "* Workspace SHA: \(BuildDetails.default.workspaceGitRevision ?? "N/A")",
+                        "* Customizations: \(BuildDetails.default.customizations.isEmpty ? "None" : BuildDetails.default.customizations.joined(separator: ", "))",
+                        "* Submodule name: branch, SHA",
+                        "\(submodulesInfo)",
                         "",
                         "## FeatureFlags",
                         "\(FeatureFlags)",

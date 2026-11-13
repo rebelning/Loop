@@ -25,8 +25,8 @@ info() {
 }
 
 info_plist_path="${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/BuildDetails.plist"
-provisioning_profile_path="${HOME}/Library/MobileDevice/Provisioning Profiles/${EXPANDED_PROVISIONING_PROFILE}.mobileprovision"
 xcode_build_version=${XCODE_PRODUCT_BUILD_VERSION:-$(xcodebuild -version | grep version | cut -d ' ' -f 3)}
+
 while [[ $# -gt 0 ]]
 do
   case $1 in
@@ -47,7 +47,6 @@ fi
 
 if [ "${info_plist_path}" == "/" -o ! -e "${info_plist_path}" ]; then
   error "File does not exist: ${info_plist_path}"
-  #error "Must provide valid --info-plist-path, or have valid \${BUILT_PRODUCTS_DIR} and \${INFOPLIST_PATH} set."
 fi
 
 info "Gathering build details in ${PWD}"
@@ -66,6 +65,17 @@ fi
 plutil -replace com-loopkit-Loop-srcroot -string "${PWD}" "${info_plist_path}"
 plutil -replace com-loopkit-Loop-build-date -string "$(date)" "${info_plist_path}"
 plutil -replace com-loopkit-Loop-xcode-version -string "${xcode_build_version}" "${info_plist_path}"
+
+# Determine the provisioning profile path
+if [ -z "${provisioning_profile_path}" ]; then
+  if [ -e "${HOME}/Library/MobileDevice/Provisioning Profiles/${EXPANDED_PROVISIONING_PROFILE}.mobileprovision" ]; then
+    provisioning_profile_path="${HOME}/Library/MobileDevice/Provisioning Profiles/${EXPANDED_PROVISIONING_PROFILE}.mobileprovision"
+  elif [ -e "${HOME}/Library/Developer/Xcode/UserData/Provisioning Profiles/${EXPANDED_PROVISIONING_PROFILE}.mobileprovision" ]; then
+    provisioning_profile_path="${HOME}/Library/Developer/Xcode/UserData/Provisioning Profiles/${EXPANDED_PROVISIONING_PROFILE}.mobileprovision"
+  else
+    warn "Provisioning profile not found in expected locations"
+  fi
+fi
 
 if [ -e "${provisioning_profile_path}" ]; then
   profile_expire_date=$(security cms -D -i "${provisioning_profile_path}" | plutil -p - | grep ExpirationDate | cut -b 23-)
@@ -90,3 +100,67 @@ then
     fi
     popd . > /dev/null
 fi
+
+# --- Customizations ---
+# Each customization adds an empty <identifier>.loopcustomization file at the workspace root or a submodule root.
+customizations_key="com-loopkit-Loop-customizations"
+/usr/libexec/PlistBuddy -c "Delete :${customizations_key}" "${info_plist_path}" 2>/dev/null || true
+/usr/libexec/PlistBuddy -c "Add :${customizations_key} array" "${info_plist_path}"
+if [ -e ../.git ]; then
+    customizations_root=..
+else
+    customizations_root=.
+fi
+find "${customizations_root}" -maxdepth 2 -name '*.loopcustomization' -exec basename {} .loopcustomization \; | sort -u | while read -r identifier; do
+    /usr/libexec/PlistBuddy -c "Add :${customizations_key}: string ${identifier}" "${info_plist_path}"
+done
+
+# --- Root repo details ---
+# Retrieve current branch (or tag) and commit SHA.
+git_branch=$(git symbolic-ref --short -q HEAD || echo "")
+git_tag=$(git describe --tags --exact-match 2>/dev/null || echo "")
+git_commit_sha=$(git log -1 --format="%h" --abbrev=7)
+git_branch_or_tag="${git_branch:-${git_tag}}"
+if [ -z "${git_branch_or_tag}" ]; then
+    git_branch_or_tag="detached"
+fi
+
+plutil -replace com-loopkit-Loop-branch -string "${git_branch_or_tag}" "${info_plist_path}"
+plutil -replace com-loopkit-Loop-commit-sha -string "${git_commit_sha}" "${info_plist_path}"
+
+# --- Submodule details ---
+# Remove an existing submodules key if it exists, then create an empty dictionary.
+# (Using PlistBuddy, which is available on macOS)
+submodules_key="com-loopkit-Loop-submodules"
+if /usr/libexec/PlistBuddy -c "Print :${submodules_key}" "${info_plist_path}" 2>/dev/null; then
+    /usr/libexec/PlistBuddy -c "Delete :${submodules_key}" "${info_plist_path}"
+fi
+/usr/libexec/PlistBuddy -c "Add :${submodules_key} dict" "${info_plist_path}"
+
+# Gather submodule details.
+# We use git submodule foreach to output lines in the form:
+#   submodule_name|branch_or_tag|commit_sha
+# Tolerate failures here (e.g. a stale gitlink in the index that is no longer
+# mapped in .gitmodules) so that gathering build metadata never fails the build.
+submodules_info=$(git submodule foreach --quiet '
+  sub_git_branch=$(git symbolic-ref --short -q HEAD || echo "")
+  sub_git_tag=$(git describe --tags --exact-match 2>/dev/null || echo "")
+  sub_git_commit_sha=$(git log -1 --format="%h" --abbrev=7)
+  sub_git_branch_or_tag="${sub_git_branch:-${sub_git_tag}}"
+  if [ -z "${sub_git_branch_or_tag}" ]; then
+    sub_git_branch_or_tag="detached"
+  fi
+  echo "$name|$sub_git_branch_or_tag|$sub_git_commit_sha"
+' 2>/dev/null) || warn "Unable to fully enumerate submodules for build details"
+
+# For each line, add a dictionary entry for that submodule.
+echo "${submodules_info}" | while IFS="|" read -r submodule_name sub_branch sub_sha; do
+    # Skip empty lines (e.g. when submodule enumeration produced no output)
+    [ -z "${submodule_name}" ] && continue
+    # Create a dictionary for this submodule
+    /usr/libexec/PlistBuddy -c "Add :${submodules_key}:${submodule_name} dict" "${info_plist_path}"
+    /usr/libexec/PlistBuddy -c "Add :${submodules_key}:${submodule_name}:branch string ${sub_branch}" "${info_plist_path}"
+    /usr/libexec/PlistBuddy -c "Add :${submodules_key}:${submodule_name}:commit_sha string ${sub_sha}" "${info_plist_path}"
+done
+
+echo "BuildDetails.plist has been updated at: ${info_plist_path}"

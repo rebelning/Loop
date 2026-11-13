@@ -50,7 +50,6 @@ public struct SettingsView: View {
             }
             
             case favoriteFoods
-            case therapySettings
         }
     }
     
@@ -108,25 +107,6 @@ public struct SettingsView: View {
             .insetGroupedListStyle()
             .navigationBarTitle(Text(NSLocalizedString("Settings", comment: "Settings screen title")))
             .navigationBarItems(trailing: dismissButton)
-            .actionSheet(item: $actionSheet) { actionSheet in
-                switch actionSheet {
-                case .cgmPicker:
-                    return ActionSheet(
-                        title: Text("Add CGM", comment: "The title of the CGM chooser in settings"),
-                        buttons: cgmChoices
-                    )
-                case .pumpPicker:
-                    return ActionSheet(
-                        title: Text("Add Pump", comment: "The title of the pump chooser in settings"),
-                        buttons: pumpChoices
-                    )
-                case .servicePicker:
-                    return ActionSheet(
-                        title: Text("Add Service", comment: "The title of the add service action sheet in settings"),
-                        buttons: serviceChoices
-                    )
-                }
-            }
             .alert(item: $alert) { alert in
                 switch alert {
                 case .deleteCGMData:
@@ -137,24 +117,6 @@ public struct SettingsView: View {
             }
             .sheet(item: $sheet) { sheet in
                 switch sheet {
-                case .therapySettings:
-                    TherapySettingsView(
-                        mode: .settings,
-                        viewModel: TherapySettingsViewModel(
-                            therapySettings: viewModel.therapySettings(),
-                            sensitivityOverridesEnabled: FeatureFlags.sensitivityOverridesEnabled,
-                            adultChildInsulinModelSelectionEnabled: FeatureFlags.adultChildInsulinModelSelectionEnabled,
-                            delegate: viewModel.therapySettingsViewModelDelegate
-                        )
-                    )
-                    .environmentObject(displayGlucosePreference)
-                    .environment(\.dismissAction, self.dismiss)
-                    .environment(\.appName, self.appName)
-                    .environment(\.chartColorPalette, .primary)
-                    .environment(\.carbTintColor, self.carbTintColor)
-                    .environment(\.glucoseTintColor, self.glucoseTintColor)
-                    .environment(\.guidanceColors, self.guidanceColors)
-                    .environment(\.insulinTintColor, self.insulinTintColor)
                 case .favoriteFoods:
                     FavoriteFoodsView()
                 }
@@ -286,15 +248,37 @@ extension SettingsView {
             }
         }
     }
-        
+
+    private var therapySettingsView: some View {
+        TherapySettingsView(
+            mode: .settings,
+            viewModel: TherapySettingsViewModel(
+                therapySettings: viewModel.therapySettings(),
+                sensitivityOverridesEnabled: FeatureFlags.sensitivityOverridesEnabled,
+                adultChildInsulinModelSelectionEnabled: FeatureFlags.adultChildInsulinModelSelectionEnabled,
+                delegate: viewModel.therapySettingsViewModelDelegate
+            )
+        )
+        .environmentObject(displayGlucosePreference)
+        .environment(\.dismissAction, self.dismiss)
+        .environment(\.appName, self.appName)
+        .environment(\.chartColorPalette, .primary)
+        .environment(\.carbTintColor, self.carbTintColor)
+        .environment(\.glucoseTintColor, self.glucoseTintColor)
+        .environment(\.guidanceColors, self.guidanceColors)
+        .environment(\.insulinTintColor, self.insulinTintColor)
+    }
+
     private var configurationSection: some View {
         Section(header: SectionHeader(label: NSLocalizedString("Configuration", comment: "The title of the Configuration section in settings"))) {
-            LargeButton(action: { sheet = .therapySettings },
-                            includeArrow: true,
+            NavigationLink(destination: therapySettingsView) {
+                LargeButton(action: { },
+                            includeArrow: false,
                             imageView: Image("Therapy Icon"),
                             label: NSLocalizedString("Therapy Settings", comment: "Title text for button to Therapy Settings"),
                             descriptiveText: NSLocalizedString("Diabetes Treatment", comment: "Descriptive text for Therapy Settings"))
-            
+            }
+
             ForEach(pluginMenuItems.filter {$0.section == .configuration}) { item in
                 item.view
             }
@@ -334,17 +318,22 @@ extension SettingsView {
                         imageView: plusImage,
                         label: NSLocalizedString("Add Pump", comment: "Title text for button to add pump device"),
                         descriptiveText: NSLocalizedString("Tap here to set up a pump", comment: "Descriptive text for button to add pump device"))
+            .background(
+                PluginPopover(
+                    isPresented: actionSheetBinding(for: .pumpPicker),
+                    title: NSLocalizedString("Add Pump", comment: "The title of the pump chooser in settings"),
+                    actions: pumpChoices
+                )
+            )
         }
     }
-    
-    private var pumpChoices: [ActionSheet.Button] {
-        var result = viewModel.pumpManagerSettingsViewModel.availableDevices.map { availableDevice in
-            ActionSheet.Button.default(Text(NSLocalizedString(availableDevice.localizedTitle,comment: "Title for Pump manager option in the alert"))) {
+
+    private var pumpChoices: [PluginPopover.Action] {
+        viewModel.pumpManagerSettingsViewModel.availableDevices.map { availableDevice in
+            .init(title: availableDevice.localizedTitle) {
                 self.viewModel.pumpManagerSettingsViewModel.didTapAdd(availableDevice)
             }
         }
-        result.append(.cancel())
-        return result
     }
     
     @ViewBuilder
@@ -361,6 +350,13 @@ extension SettingsView {
                         imageView: plusImage,
                         label: NSLocalizedString("Add CGM", comment: "Title text for button to add CGM device"),
                         descriptiveText: NSLocalizedString("Tap here to set up a CGM", comment: "Descriptive text for button to add CGM device"))
+            .background(
+                PluginPopover(
+                    isPresented: actionSheetBinding(for: .cgmPicker),
+                    title: NSLocalizedString("Add CGM", comment: "The title of the CGM chooser in settings"),
+                    actions: cgmChoices
+                )
+            )
         }
     }
     
@@ -369,21 +365,19 @@ extension SettingsView {
             LargeButton(action: { sheet = .favoriteFoods },
                         includeArrow: true,
                         imageView: Image("Favorite Foods Icon").renderingMode(.template).foregroundColor(carbTintColor),
-                        label:NSLocalizedString("Favorite Foods", comment: "Title text for section to manage and select favorite foods"),
-                        descriptiveText:NSLocalizedString("Simplify Carb Entry",comment: "Descriptive text for button to simplify the process of entering carbohydrate information") )
+                        label: NSLocalizedString("Favorite Foods", comment: "Label for Favorite Foods icon in Settings"),
+                        descriptiveText: NSLocalizedString("Simplify Carb Entry", comment: "Subheading for Favorite Foods in Settings"))
         }
     }
     
-    private var cgmChoices: [ActionSheet.Button] {
-        var result = viewModel.cgmManagerSettingsViewModel.availableDevices
+    private var cgmChoices: [PluginPopover.Action] {
+        viewModel.cgmManagerSettingsViewModel.availableDevices
             .sorted(by: {$0.localizedTitle < $1.localizedTitle})
             .map { availableDevice in
-                ActionSheet.Button.default(Text(NSLocalizedString(availableDevice.localizedTitle,comment: "Title for CGM manager option in the alert"))) {
+                .init(title: availableDevice.localizedTitle) {
                     self.viewModel.cgmManagerSettingsViewModel.didTapAdd(availableDevice)
+                }
             }
-        }
-        result.append(.cancel())
-        return result
     }
     
     private var servicesSection: some View {
@@ -401,20 +395,36 @@ extension SettingsView {
                             imageView: plusImage,
                             label: NSLocalizedString("Add Service", comment: "The title of the add service button in settings"),
                             descriptiveText: NSLocalizedString("Tap here to set up a Service", comment: "The descriptive text of the add service button in settings"))
+                .background(
+                    PluginPopover(
+                        isPresented: actionSheetBinding(for: .servicePicker),
+                        title: NSLocalizedString("Add Service", comment: "The title of the add service action sheet in settings"),
+                        actions: serviceChoices
+                    )
+                )
             }
         }
     }
-    
-    private var serviceChoices: [ActionSheet.Button] {
-        var result = viewModel.servicesViewModel.inactiveServices().map { availableService in
-            ActionSheet.Button.default(Text(availableService.localizedTitle)) {
+
+    private var serviceChoices: [PluginPopover.Action] {
+        viewModel.servicesViewModel.inactiveServices().map { availableService in
+            .init(title: availableService.localizedTitle) {
                 self.viewModel.servicesViewModel.didTapAddService(availableService)
             }
         }
-        result.append(.cancel())
-        return result
     }
     
+    private func actionSheetBinding(for destination: Destination.ActionSheet) -> Binding<Bool> {
+        Binding(
+            get: { actionSheet == destination },
+            set: { isPresented in
+                if !isPresented && actionSheet == destination {
+                    actionSheet = nil
+                }
+            }
+        )
+    }
+
     private var deleteDataSection: some View {
         Section {
             if viewModel.pumpManagerSettingsViewModel.isTestingDevice {
@@ -440,25 +450,15 @@ extension SettingsView {
     
     private func makeDeleteAlert<T>(for model: DeviceViewModel<T>) -> SwiftUI.Alert {
         return SwiftUI.Alert(title: Text("Delete Testing Data"),
-                             message: Text("Are you sure you want to delete all your \(model.name()) Data?\n(This action is not reversible)"),
+                             message: Text("Are you sure you want to delete all your \(model.name()) Data?\n(This action is not reversible)", comment: "Confirmation before you delete all your Simulated Test Devices data"),
                              primaryButton: .cancel(),
                              secondaryButton: .destructive(Text("Delete"), action: model.deleteTestingDataFunc()))
     }
     
     private var supportSection: some View {
         Section(header: SectionHeader(label: NSLocalizedString("Support", comment: "The title of the support section in settings"))) {
-            Button(action: {
-                self.viewModel.didTapIssueReport()
-            }) {
-                Text("Issue Report", comment: "The title text for the issue report menu item")
-            }
-
             ForEach(pluginMenuItems.filter( { $0.section == .support })) {
                 $0.view
-            }
-
-            NavigationLink(destination: CriticalEventLogExportView(viewModel: viewModel.criticalEventLogExportViewModel)) {
-                Text(NSLocalizedString("Export Critical Event Logs", comment: "The title of the export critical event logs in support"))
             }
         }
     }
@@ -608,6 +608,72 @@ fileprivate struct LargeButton<Content: View, SecondaryContent: View>: View {
                 }
             }
             .padding(EdgeInsets(top: topBottomPadding, leading: 0, bottom: topBottomPadding, trailing: 0))
+        }
+    }
+}
+
+struct PluginPopover: UIViewControllerRepresentable {
+    struct Action {
+        let title: String
+        let handler: () -> Void
+    }
+
+    @Binding var isPresented: Bool
+    let title: String
+    let actions: [Action]
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+
+    func makeUIViewController(context: Context) -> UIViewController {
+        UIViewController()
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        let coordinator = context.coordinator
+
+        if !isPresented {
+            coordinator.didPresent = false
+            return
+        }
+
+        guard !coordinator.didPresent else { return }
+        guard uiViewController.presentedViewController == nil else { return }
+
+        coordinator.didPresent = true
+        coordinator.onDismiss = { self.isPresented = false }
+
+        let alert = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
+        for action in actions {
+            alert.addAction(UIAlertAction(title: action.title, style: .default) { _ in
+                self.isPresented = false
+                action.handler()
+            })
+        }
+
+        alert.addAction(UIAlertAction(
+            title: NSLocalizedString("Cancel", comment: "The title of the cancel action in an action sheet"),
+            style: .destructive
+        ) { _ in
+            self.isPresented = false
+        })
+
+        if let popover = alert.popoverPresentationController {
+            popover.sourceView = uiViewController.view
+            popover.sourceRect = uiViewController.view.bounds
+            popover.delegate = coordinator
+        }
+
+        uiViewController.present(alert, animated: true)
+    }
+
+    final class Coordinator: NSObject, UIPopoverPresentationControllerDelegate {
+        var didPresent = false
+        var onDismiss: (() -> Void)?
+
+        func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+            onDismiss?()
         }
     }
 }
