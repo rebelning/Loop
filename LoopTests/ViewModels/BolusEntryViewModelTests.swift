@@ -702,14 +702,31 @@ class BolusEntryViewModelTests: XCTestCase {
     func testCarbEntryDateAndAbsorptionTimeString() async throws {
         await setUpViewModel(originalCarbEntry: mockOriginalCarbEntry, potentialCarbEntry: mockPotentialCarbEntry)
 
-        XCTAssertEqual("12:00 PM + 0m", bolusEntryViewModel.carbEntryDateAndAbsorptionTimeString)
+        let value = try XCTUnwrap(bolusEntryViewModel.carbEntryDateAndAbsorptionTimeString)
+        let absorptionSuffix = " + 0m"
+        XCTAssertTrue(value.hasSuffix(absorptionSuffix))
+        try assertCarbEntryTimeIsNoon(String(value.dropLast(absorptionSuffix.count)))
     }
     
     func testCarbEntryDateAndAbsorptionTimeString2() async throws {
         let potentialCarbEntry = NewCarbEntry(quantity: BolusEntryViewModelTests.exampleCarbQuantity, startDate: Self.exampleStartDate, foodType: nil, absorptionTime: nil)
         await setUpViewModel(originalCarbEntry: mockOriginalCarbEntry, potentialCarbEntry: potentialCarbEntry)
 
-        XCTAssertEqual("12:00 PM", bolusEntryViewModel.carbEntryDateAndAbsorptionTimeString)
+        try assertCarbEntryTimeIsNoon(XCTUnwrap(bolusEntryViewModel.carbEntryDateAndAbsorptionTimeString))
+    }
+
+    // Compare the known time rather than assuming the simulator uses a 12-hour clock.
+    // The absorption suffix is verified separately above.
+    private func assertCarbEntryTimeIsNoon(_ value: String, file: StaticString = #filePath, line: UInt = #line) throws {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        let date = try XCTUnwrap(formatter.date(from: value), file: file, line: line)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = formatter.timeZone
+        XCTAssertEqual(calendar.component(.hour, from: date), 12, file: file, line: line)
+        XCTAssertEqual(calendar.component(.minute, from: date), 0, file: file, line: line)
     }
 
     func testIsManualGlucosePromptVisible() throws {
