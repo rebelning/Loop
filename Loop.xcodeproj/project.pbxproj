@@ -592,6 +592,7 @@
 		E9C58A7F24DB529A00487A17 /* counteraction_effect_falling_glucose.json in Resources */ = {isa = PBXBuildFile; fileRef = E9C58A7A24DB529A00487A17 /* counteraction_effect_falling_glucose.json */; };
 		E9C58A8024DB529A00487A17 /* insulin_effect.json in Resources */ = {isa = PBXBuildFile; fileRef = E9C58A7B24DB529A00487A17 /* insulin_effect.json */; };
 		FADE0001000000000000DE02 /* DevelopmentBranchAlerter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADE0001000000000000DE01 /* DevelopmentBranchAlerter.swift */; };
+		ED1F576C0540E354985D6F76 /* PumpPluginCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E761EB373B3AE6F50A4A531 /* PumpPluginCompatibilityTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1420,6 +1421,7 @@
 		F5E0BDDA27E1D71F0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F5E0BDE327E1D7230033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FADE0001000000000000DE01 /* DevelopmentBranchAlerter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentBranchAlerter.swift; sourceTree = "<group>"; };
+		1E761EB373B3AE6F50A4A531 /* PumpPluginCompatibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpPluginCompatibilityTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1590,6 +1592,7 @@
 		1DA7A83F24476E8C008257F0 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				1E761EB373B3AE6F50A4A531 /* PumpPluginCompatibilityTests.swift */,
 				1DA7A84024476E98008257F0 /* Alerts */,
 				C16575722538AFF6004AE16E /* CGMStalenessMonitorTests.swift */,
 				A91E4C2224F86F1000BE9213 /* CriticalEventLogExportManagerTests.swift */,
@@ -3763,6 +3766,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED1F576C0540E354985D6F76 /* PumpPluginCompatibilityTests.swift in Sources */,
 				A9DF02CB24F72B9E00B7C988 /* CriticalEventLogTests.swift in Sources */,
 				1D80313D24746274002810DF /* AlertStoreTests.swift in Sources */,
 				C1777A6625A125F100595963 /* ManualEntryDoseViewModelTests.swift in Sources */,
