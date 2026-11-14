@@ -10,15 +10,12 @@ import UIKit
 import LoopKit
 import BackgroundTasks
 
-final class AppDelegate: UIResponder, UIApplicationDelegate {
+final class AppDelegate: UIResponder, UIApplicationDelegate, WindowProvider {
 
-    /// The shared app manager. Per-scene lifecycle is driven by `SceneDelegate`, which
-    /// accesses this instance through the app delegate.
+    weak var window: UIWindow?
+
+    /// Shared by background callbacks and the scene; its UI phase waits for a window.
     let loopAppManager = LoopAppManager()
-
-    /// The launch options passed at `didFinishLaunchingWithOptions`, retained so the
-    /// scene delegate can forward them to `LoopAppManager` when it connects.
-    private(set) var launchOptions: [UIApplication.LaunchOptionsKey: Any]?
 
     private let log = DiagnosticLog(category: "AppDelegate")
 
@@ -31,19 +28,29 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
         log.default("lastPathComponent = %{public}@", String(describing: Bundle.main.appStoreReceiptURL?.lastPathComponent))
 
-        // The window is owned by the scene, so app manager initialization and launch are
-        // deferred to `SceneDelegate.scene(_:willConnectTo:options:)`.
-        self.launchOptions = launchOptions
         let registered = DeviceDataManager.registerBackgroundProcessingTask { [weak self] task in
-            guard let self, self.loopAppManager.isLaunchComplete else {
-                task.setTaskCompleted(success: false)
-                return
-            }
-            let deviceDataManager = self.loopAppManager.getDeviceDataManager()
-            DispatchQueue.global(qos: .background).async {
-                deviceDataManager.handleBackgroundProcessingTask(task)
+            DispatchQueue.main.async {
+                guard let self else {
+                    task.setTaskCompleted(success: false)
+                    return
+                }
+                if self.loopAppManager.isLaunchPending { self.loopAppManager.launch() }
+                guard self.loopAppManager.isReadyForBackgroundWork else {
+                    self.log.default("[background] managers unavailable or onboarding incomplete; rescheduling")
+                    DeviceDataManager.scheduleBackgroundProcessingRetry()
+                    task.setTaskCompleted(success: false)
+                    return
+                }
+                let manager = self.loopAppManager.getDeviceDataManager()
+                DispatchQueue.global(qos: .background).async {
+                    manager.handleBackgroundProcessingTask(task)
+                }
             }
         }
+        // Initialize managers even when iOS launches us without connecting a scene.
+        // The UI/onboarding phase stays pending until SceneDelegate supplies its window.
+        loopAppManager.initialize(windowProvider: self, launchOptions: launchOptions)
+        loopAppManager.launch()
         log.default("Background processing task registration: %{public}@", String(registered))
         return true
     }

@@ -56,16 +56,8 @@ protocol WindowProvider: AnyObject {
 }
 
 class LoopAppManager: NSObject {
-    private enum State: Int {
-        case initialize
-        case checkProtectedDataAvailable
-        case launchManagers
-        case launchOnboarding
-        case launchHomeScreen
-        case launchComplete
-
-        var next: State { State(rawValue: rawValue + 1) ?? .launchComplete }
-    }
+    private typealias State = LoopAppLaunchState
+    private var onboardingLaunchStarted = false
 
     private weak var windowProvider: WindowProvider?
     private var launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -104,10 +96,6 @@ class LoopAppManager: NSObject {
         self.windowProvider = windowProvider
         self.launchOptions = launchOptions
         
-        if FeatureFlags.siriEnabled && INPreferences.siriAuthorizationStatus() == .notDetermined {
-            INPreferences.requestSiriAuthorization { _ in }
-        }
-
         registerBackgroundTasks()
 
         if FeatureFlags.remoteCommandsEnabled {
@@ -135,6 +123,20 @@ class LoopAppManager: NSObject {
 
     var isLaunchComplete: Bool { state == .launchComplete }
 
+    var isReadyForBackgroundWork: Bool {
+        state.canRunBackgroundWork(onboardingComplete: onboardingManager?.isComplete == true)
+    }
+
+    /// The AppDelegate remains the window provider across headless and scene launches.
+    func sceneDidConnect() {
+        dispatchPrecondition(condition: .onQueue(.main))
+        windowProvider?.window?.tintColor = .loopAccent
+        if FeatureFlags.siriEnabled && INPreferences.siriAuthorizationStatus() == .notDetermined {
+            INPreferences.requestSiriAuthorization { _ in }
+        }
+        resumeLaunch()
+    }
+
     private func resumeLaunch() {
         if state == .checkProtectedDataAvailable {
             checkProtectedDataAvailable()
@@ -142,10 +144,11 @@ class LoopAppManager: NSObject {
         if state == .launchManagers {
             launchManagers()
         }
-        if state == .launchOnboarding {
+        if state.shouldLaunchOnboarding(hasWindow: windowProvider?.window != nil,
+                                        alreadyLaunching: onboardingLaunchStarted) {
             launchOnboarding()
         }
-        if state == .launchHomeScreen {
+        if state == .launchHomeScreen, windowProvider?.window != nil {
             launchHomeScreen()
         }
 
@@ -303,8 +306,10 @@ class LoopAppManager: NSObject {
         dispatchPrecondition(condition: .onQueue(.main))
         precondition(state == .launchOnboarding)
 
+        onboardingLaunchStarted = true
         onboardingManager.launch {
             DispatchQueue.main.async {
+                self.onboardingLaunchStarted = false
                 self.state = self.state.next
                 self.resumeLaunch()
             }
@@ -333,6 +338,7 @@ class LoopAppManager: NSObject {
         }
 
         rootNavigationController?.setViewControllers([statusTableViewController], animated: true)
+        deeplinkManager = DeeplinkManager(rootViewController: rootViewController)
 
         deviceDataManager.refreshDeviceData()
 
@@ -357,7 +363,7 @@ class LoopAppManager: NSObject {
         }
         settingsManager?.didBecomeActive()
         deviceDataManager?.didBecomeActive()
-        alertManager.inferDeliveredLoopNotRunningNotifications()
+        alertManager?.inferDeliveredLoopNotRunningNotifications()
         
         widgetLog.default("Refreshing widget. Reason: App didBecomeActive")
         WidgetCenter.shared.reloadAllTimelines()
@@ -487,8 +493,14 @@ class LoopAppManager: NSObject {
     
     // MARK: performFetch
     func performFetch(completion: @escaping (UIBackgroundFetchResult) -> Void) {
-        deviceDataManager.refreshDeviceData()
-        completion(.newData)
+        guard isReadyForBackgroundWork else {
+            completion(.failed)
+            return
+        }
+        let finish = BackgroundRefreshCompletion { success in completion(success ? .newData : .failed) }
+        deviceDataManager.refreshDeviceData {
+            DispatchQueue.main.async { finish.finish(true) }
+        }
     }
 }
 
@@ -651,6 +663,7 @@ extension LoopAppManager: TemporaryScheduleOverrideHistoryDelegate {
 
 extension LoopAppManager: ResetLoopManagerDelegate {
     func askUserToConfirmLoopReset() {
+        guard isLaunchComplete else { return }
         resetLoopManager.askUserToConfirmLoopReset()
     }
     

@@ -593,6 +593,8 @@
 		E9C58A8024DB529A00487A17 /* insulin_effect.json in Resources */ = {isa = PBXBuildFile; fileRef = E9C58A7B24DB529A00487A17 /* insulin_effect.json */; };
 		FADE0001000000000000DE02 /* DevelopmentBranchAlerter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADE0001000000000000DE01 /* DevelopmentBranchAlerter.swift */; };
 		ED1F576C0540E354985D6F76 /* PumpPluginCompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E761EB373B3AE6F50A4A531 /* PumpPluginCompatibilityTests.swift */; };
+		BD66C7ACA457E951CCD839F6 /* LoopAppLaunchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E838A4CA25D41D5B2BE21D5 /* LoopAppLaunchState.swift */; };
+		828580D6C1E79D9A0078F1DC /* BackgroundLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9361FA9E9181031527C3A2 /* BackgroundLaunchTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1422,6 +1424,8 @@
 		F5E0BDE327E1D7230033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FADE0001000000000000DE01 /* DevelopmentBranchAlerter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentBranchAlerter.swift; sourceTree = "<group>"; };
 		1E761EB373B3AE6F50A4A531 /* PumpPluginCompatibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpPluginCompatibilityTests.swift; sourceTree = "<group>"; };
+		4E838A4CA25D41D5B2BE21D5 /* LoopAppLaunchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopAppLaunchState.swift; sourceTree = "<group>"; };
+		BD9361FA9E9181031527C3A2 /* BackgroundLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundLaunchTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1593,6 +1597,7 @@
 			isa = PBXGroup;
 			children = (
 				1E761EB373B3AE6F50A4A531 /* PumpPluginCompatibilityTests.swift */,
+				BD9361FA9E9181031527C3A2 /* BackgroundLaunchTests.swift */,
 				1DA7A84024476E98008257F0 /* Alerts */,
 				C16575722538AFF6004AE16E /* CGMStalenessMonitorTests.swift */,
 				A91E4C2224F86F1000BE9213 /* CriticalEventLogExportManagerTests.swift */,
@@ -2056,6 +2061,7 @@
 				89CA2B3C226E6B13004D9350 /* LocalTestingScenariosManager.swift */,
 				A9C62D862331703000535612 /* LoggingServicesManager.swift */,
 				A9D5C5B525DC6C6A00534873 /* LoopAppManager.swift */,
+				4E838A4CA25D41D5B2BE21D5 /* LoopAppLaunchState.swift */,
 				43A567681C94880B00334FAC /* LoopDataManager.swift */,
 				43C094491CACCC73001F6403 /* NotificationManager.swift */,
 				A97F250725E056D500F0EE19 /* OnboardingManager.swift */,
@@ -3469,6 +3475,7 @@
 				43B260491ED248FB008CAA77 /* CarbEntryTableViewCell.swift in Sources */,
 				142CB75B2A60BFC30075748A /* FavoriteFoodsView.swift in Sources */,
 				A9D5C5B625DC6C6A00534873 /* LoopAppManager.swift in Sources */,
+				BD66C7ACA457E951CCD839F6 /* LoopAppLaunchState.swift in Sources */,
 				4302F4E11D4E9C8900F0FCAF /* TextFieldTableViewController.swift in Sources */,
 				1452F4AB2A851EDF00F8B9E4 /* AddEditFavoriteFoodView.swift in Sources */,
 				C1742332259BEADC00399C9D /* ManualEntryDoseView.swift in Sources */,
@@ -3767,6 +3774,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ED1F576C0540E354985D6F76 /* PumpPluginCompatibilityTests.swift in Sources */,
+				828580D6C1E79D9A0078F1DC /* BackgroundLaunchTests.swift in Sources */,
 				A9DF02CB24F72B9E00B7C988 /* CriticalEventLogTests.swift in Sources */,
 				1D80313D24746274002810DF /* AlertStoreTests.swift in Sources */,
 				C1777A6625A125F100595963 /* ManualEntryDoseViewModelTests.swift in Sources */,

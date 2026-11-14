@@ -1152,33 +1152,16 @@ extension DeviceDataManager: PumpManagerDelegate {
         }
     }
     
-    func refreshDeviceData() {
-//        refreshCGM() {
-//            self.queue.async {
-//                guard let pumpManager = self.pumpManager, pumpManager.isOnboarded else {
-//                    return
-//                }
-//                pumpManager.ensureCurrentPumpData(completion: nil)
-//            }
-//        }
-        if cgmManager == nil {
-                log.default("No CGM Manager available")
-                self.queue.async {
-                    guard let pumpManager = self.pumpManager, pumpManager.isOnboarded else {
-                        return
-                    }
-                    pumpManager.ensureCurrentPumpData(completion: nil)
+    func refreshDeviceData(completion: (() -> Void)? = nil) {
+        refreshCGM {
+            self.queue.async {
+                guard let pumpManager = self.pumpManager, pumpManager.isOnboarded else {
+                    completion?()
+                    return
                 }
-            } else {
-                refreshCGM() {
-                    self.queue.async {
-                        guard let pumpManager = self.pumpManager, pumpManager.isOnboarded else {
-                            return
-                        }
-                        pumpManager.ensureCurrentPumpData(completion: nil)
-                    }
-                }
+                pumpManager.ensureCurrentPumpData { _ in completion?() }
             }
+        }
     }
 
     func pumpManagerMustProvideBLEHeartbeat(_ pumpManager: PumpManager) -> Bool {
@@ -1847,20 +1830,42 @@ extension DeviceDataManager {
 
     public func handleBackgroundProcessingTask(_ task: BGProcessingTask) {
         dispatchPrecondition(condition: .notOnQueue(.main))
-
         scheduleBackgroundProcessingTask(isRetry: true)
-
-        
-        //
-        task.expirationHandler = {
-            self.log.default("Background processing task expired - cancelling")
-            self.cgmFetchTimer?.invalidate()
+        DispatchQueue.main.async {
+            let completion = BackgroundRefreshCompletion { success in
+                self.log.default("[background] refresh finished success=%{public}@", String(success))
+                if success {
+                    // Supplementary timer only; this is not a background wake source.
+                    self.startCGMFetchTimer()
+                } else {
+                    self.cgmFetchTimer?.invalidate()
+                }
+                task.setTaskCompleted(success: success)
+            }
+            task.expirationHandler = {
+                DispatchQueue.main.async {
+                    self.log.default("[background] refresh expired")
+                    completion.finish(false)
+                }
+            }
+            self.log.default("[background] starting immediate device refresh")
+            self.refreshDeviceData {
+                DispatchQueue.main.async { completion.finish(true) }
+            }
         }
+    }
 
-        DispatchQueue.global(qos: .background).async {
-            self.log.default("Background processing task - startCGMFetchTimer")
-            self.startCGMFetchTimer()
-            task.setTaskCompleted(success: true)
+    @discardableResult
+    static func scheduleBackgroundProcessingRetry() -> Bool {
+        let request = BGProcessingTaskRequest(identifier: backgroundProcessingTaskIdentifier)
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 60)
+        request.requiresNetworkConnectivity = true
+        do {
+            try BGTaskScheduler.shared.submit(request)
+            return true
+        } catch {
+            NSLog("[background] failed to submit retry: %@", String(describing: error))
+            return false
         }
     }
 

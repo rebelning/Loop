@@ -36,13 +36,8 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate, WindowProvider {
 
         guard let loopAppManager else { return }
 
-        let launchOptions = (UIApplication.shared.delegate as? AppDelegate)?.launchOptions
-        if loopAppManager.isInInitialState {
-            loopAppManager.initialize(windowProvider: self, launchOptions: launchOptions)
-        }
-        if loopAppManager.isLaunchPending {
-            loopAppManager.launch()
-        }
+        (UIApplication.shared.delegate as? AppDelegate)?.window = window
+        loopAppManager.sceneDidConnect()
 
         if let url = connectionOptions.urlContexts.first?.url {
             _ = loopAppManager.handle(url)
