@@ -1680,7 +1680,7 @@ final class StatusTableViewController: LoopChartsTableViewController {
                                           therapySettingsViewModelDelegate: deviceManager,
                                           delegate: self)
         let hostingController = DismissibleHostingController(
-            rootView: SettingsView(viewModel: viewModel, localizedAppNameAndVersion: supportManager.localizedAppNameAndVersion)
+            rootView: SettingsView(viewModel: viewModel, localizedAppNameAndVersion: Bundle.main.localizedNameAndVersion)
                 .environmentObject(deviceManager.displayGlucosePreference)
                 .environment(\.appName, Bundle.main.bundleDisplayName),
             isModalInPresentation: false)

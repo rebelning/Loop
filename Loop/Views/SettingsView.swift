@@ -99,7 +99,9 @@ public struct SettingsView: View {
 
                     supportSection
 
-                    if let profileExpiration = BuildDetails.default.profileExpiration, FeatureFlags.profileExpirationSettingsViewEnabled {
+                    if AppExpirationAlerter.isTestFlightBuild(),
+                       let profileExpiration = BuildDetails.default.profileExpiration,
+                       FeatureFlags.profileExpirationSettingsViewEnabled {
                         appExpirationSection(profileExpiration: profileExpiration)
                     }
                 }
