@@ -8,8 +8,8 @@
 
 // Version
 //   [for DIY Loop] configure the version number in LoopWorkspace
-LOOP_MARKETING_VERSION = 1.0
-CURRENT_PROJECT_VERSION = 1
+LOOP_MARKETING_VERSION = 3.14.12
+CURRENT_PROJECT_VERSION = 120
 
 // Optional override (enables override of version)
 #include? "../VersionOverride.xcconfig"
